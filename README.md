@@ -43,6 +43,7 @@ vercel --prod
 ### Build Configuration
 
 Vercel automatically detects Vite and uses the following settings:
+
 - **Build Command**: `npm run build`
 - **Output Directory**: `dist`
 - **Install Command**: `npm install`
@@ -50,6 +51,7 @@ Vercel automatically detects Vite and uses the following settings:
 ### Environment Variables
 
 If your application requires environment variables, add them in the Vercel dashboard:
+
 1. Go to your project settings
 2. Navigate to Environment Variables
 3. Add variables prefixed with `VITE_` to make them accessible in your app
@@ -63,11 +65,13 @@ Generate color palette suggestions from the Sanzo Wada Dictionary based on mood 
 **Endpoint:** `POST /api/generate-palette`
 
 **Request Headers:**
+
 ```
 Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```typescript
 {
   "mood": string,                      // Required: Description of mood/inspiration (max 500 chars)
@@ -88,6 +92,7 @@ Content-Type: application/json
 ```
 
 **Response (200 OK):**
+
 ```typescript
 {
   "mood": string,                      // The mood/inspiration that was analyzed
@@ -107,11 +112,13 @@ Content-Type: application/json
 **Error Responses:**
 
 - `400 Bad Request`: Invalid mood description
+
   ```json
   { "error": "Mood description is required" }
   ```
 
 - `429 Too Many Requests`: Rate limit exceeded
+
   ```json
   { "error": "Rate limit exceeded. Please try again in a moment." }
   ```
@@ -127,6 +134,7 @@ Content-Type: application/json
 **Example Requests:**
 
 Basic request:
+
 ```bash
 curl -X POST http://localhost:3000/api/generate-palette \
   -H "Content-Type: application/json" \
@@ -134,6 +142,7 @@ curl -X POST http://localhost:3000/api/generate-palette \
 ```
 
 With conversation history:
+
 ```bash
 curl -X POST http://localhost:3000/api/generate-palette \
   -H "Content-Type: application/json" \
@@ -163,9 +172,11 @@ vercel dev
 ```
 
 **Environment Variables Required (in .env file):**
+
 - `ANTHROPIC_API_KEY`: Your Anthropic API key for Claude
 
 **Model Information:**
+
 - Uses Claude 3.5 Haiku for fast, cost-effective responses
 - Max response time: ~2-5 seconds
 - Always returns exactly 3 palette suggestions

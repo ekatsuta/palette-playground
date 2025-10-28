@@ -41,7 +41,7 @@ export interface GeneratePalettesResponse {
 
 // Conversation types
 export interface ConversationMessage {
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string | PaletteWithReasoning[];
   timestamp?: number;
 }
