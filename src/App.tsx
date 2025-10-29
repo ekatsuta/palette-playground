@@ -1,30 +1,46 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { SingleCompositionPage, compositions } from "./components/SingleCompositionPage";
-import { sanzoWadaData, ColorCombination } from "../data/dummy-data";
+import { generatePalette } from "./utils/api";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import "./App.css";
+import type { PaletteWithReasoning } from "./types/palette";
+import styles from "./App.module.css";
 
 export default function App() {
   const [mood, setMood] = useState("");
-  const [selectedPalette, setSelectedPalette] = useState<ColorCombination | null>(null);
+  const [selectedPalette, setSelectedPalette] = useState<PaletteWithReasoning | null>(null);
   const [currentCompositionIndex, setCurrentCompositionIndex] = useState(0);
   const [showResults, setShowResults] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Total number of compositions to paginate through
   const totalPages = compositions.length;
 
-  // Simulate AI palette selection - select just ONE palette
-  const handleSubmit = (e: React.FormEvent) => {
+  // Call API to generate palette based on mood
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (mood.trim()) {
-      // Randomly select 1 palette
-      const shuffled = [...sanzoWadaData.combinations].sort(() => Math.random() - 0.5);
-      const selected = shuffled[0];
+    if (!mood.trim()) return;
 
-      setSelectedPalette(selected);
+    setIsLoading(true);
+    setError(null);
+    setShowResults(false);
+
+    try {
+      // Call API (automatically uses mock or production based on env)
+      const response = await generatePalette(mood);
+
+      // Parse the response
+      const { palette } = response;
+
+      setSelectedPalette(palette);
       setCurrentCompositionIndex(0);
       setShowResults(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to generate palette");
+      console.error("Error generating palette:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,22 +74,22 @@ export default function App() {
   }, [showResults, totalPages]);
 
   return (
-    <div className="app-container">
+    <div className={styles.appContainer}>
       {/* Header with input - always visible */}
-      <div className="header">
-        <div className="header-content">
-          <div className="header-inner">
-            <h1 className="header-title">Color Playground</h1>
-            <form onSubmit={handleSubmit} className="search-form">
+      <div className={styles.header}>
+        <div className={styles.headerContent}>
+          <div className={styles.headerInner}>
+            <h1 className={styles.headerTitle}>Color Playground</h1>
+            <form onSubmit={handleSubmit} className={styles.searchForm}>
               <input
                 type="text"
                 value={mood}
                 onChange={(e) => setMood(e.target.value)}
                 placeholder="Describe a mood or feeling..."
-                className="search-input"
+                className={styles.searchInput}
               />
-              <button type="submit" className="explore-button">
-                Explore
+              <button type="submit" className={styles.exploreButton} disabled={isLoading}>
+                {isLoading ? "Generating..." : "Explore"}
               </button>
             </form>
           </div>
@@ -81,20 +97,56 @@ export default function App() {
       </div>
 
       {/* Main content */}
-      <div className="main-content">
-        {!showResults ? (
+      <div className={styles.mainContent}>
+        {isLoading ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className={styles.welcomeScreen}
+          >
+            <div className={styles.welcomeContent}>
+              <div className={styles.welcomeTextSection}>
+                <div className={styles.welcomeDescription}>
+                  <p>Generating your perfect palette...</p>
+                </div>
+                <div className={styles.welcomeSubdescription}>
+                  <p>Analyzing your mood and selecting the best color combination.</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        ) : error ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className={styles.welcomeScreen}
+          >
+            <div className={styles.welcomeContent}>
+              <div className={styles.welcomeTextSection}>
+                <div className={styles.welcomeDescription}>
+                  <p style={{ color: "#d4183d" }}>Error: {error}</p>
+                </div>
+                <div className={styles.welcomeSubdescription}>
+                  <p>Please try again with a different mood description.</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        ) : !showResults ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
-            className="welcome-screen"
+            className={styles.welcomeScreen}
           >
-            <div className="welcome-content">
-              <div className="welcome-text-section">
-                <div className="welcome-description">
+            <div className={styles.welcomeContent}>
+              <div className={styles.welcomeTextSection}>
+                <div className={styles.welcomeDescription}>
                   <p>Discover harmonious color palettes inspired by your creative vision.</p>
                 </div>
-                <div className="welcome-subdescription">
+                <div className={styles.welcomeSubdescription}>
                   <p>
                     Enter a mood, feeling, or concept above to explore curated combinations from the
                     Sanzo Wada Dictionary of Color.
@@ -102,23 +154,23 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="welcome-examples">
-                <p className="welcome-example">
+              <div className={styles.welcomeExamples}>
+                <p className={styles.welcomeExample}>
                   Try: "The quiet melancholy of rain on autumn leaves"
                 </p>
-                <p className="welcome-example">
+                <p className={styles.welcomeExample}>
                   Or: "Electric excitement and urban energy at night"
                 </p>
               </div>
             </div>
           </motion.div>
         ) : (
-          <div className="results-container">
+          <div className={styles.resultsContainer}>
             {/* Navigation arrows */}
             {currentCompositionIndex > 0 && (
               <button
                 onClick={handlePrevious}
-                className="nav-button nav-button-left"
+                className={`${styles.navButton} ${styles.navButtonLeft}`}
                 aria-label="Previous composition"
               >
                 <ChevronLeft />
@@ -128,7 +180,7 @@ export default function App() {
             {currentCompositionIndex < totalPages - 1 && (
               <button
                 onClick={handleNext}
-                className="nav-button nav-button-right"
+                className={`${styles.navButton} ${styles.navButtonRight}`}
                 aria-label="Next composition"
               >
                 <ChevronRight />
@@ -155,7 +207,7 @@ export default function App() {
             )}
 
             {/* Page indicator */}
-            <div className="page-indicator">
+            <div className={styles.pageIndicator}>
               <span>
                 {currentCompositionIndex + 1} / {totalPages}
               </span>

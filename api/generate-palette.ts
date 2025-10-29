@@ -6,24 +6,20 @@ import type { GeneratePalettesRequest, SanzoWadaData } from "../src/types/palett
 const typedSanzoWadaData = sanzoWadaData as SanzoWadaData;
 
 const SYSTEM_PROMPT = `You are an expert in color theory, art history, and the psychology of color. You have deep knowledge of the Sanzo Wada Dictionary of Color Combinations, a legendary 1933 reference work by Japanese artist Sanzo Wada that contains 348 carefully curated color palettes that capture Japanese perceptions of color.
-Your role is to interpret artists' emotional and conceptual descriptions and select the most appropriate color combinations from the Sanzo Wada dictionary that will inspire their creative work.
+Your role is to interpret artists' emotional and conceptual descriptions and select the most appropriate color combination from the Sanzo Wada dictionary that will inspire their creative work.
 
-When selecting palettes, consider:
+When selecting a palette, consider:
 - Emotional resonance: How do these colors evoke the described feeling?
 - Cultural associations: What meanings do these colors carry across different cultures?
 - Psychological impact: How do these colors affect mood and perception?
 - Harmony and balance: How do the colors work together as a cohesive palette?
 - Practical application: How might these colors translate to different artistic mediums (painting, digital art, collage, etc.)?
 
-You should select 3-5 combinations that best capture the essence of the artist's inspiration, ordered from best match to good alternatives. Provide brief reasoning for each selection to help the artist understand why these palettes were chosen.`;
-
-interface LLMSelection {
-  id: number;
-  reasoning: string;
-}
+You should select the single best combination that captures the essence of the artist's inspiration. Provide brief reasoning to help the artist understand why this palette was chosen.`;
 
 interface LLMResponse {
-  selections: LLMSelection[];
+  id: number;
+  reasoning: string;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -45,7 +41,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { mood, conversationHistory, currentPalettes } = req.body as GeneratePalettesRequest;
+  const { mood, conversationHistory, currentPalette } = req.body as GeneratePalettesRequest;
 
   // Validate input
   if (!mood || typeof mood !== "string" || mood.trim().length === 0) {
@@ -72,11 +68,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .join("\n")}\n\n`;
     }
 
-    if (currentPalettes && currentPalettes.length > 0) {
-      contextPrompt += `\nCurrently displayed palettes:\n${JSON.stringify(currentPalettes, null, 2)}\n\n`;
+    if (currentPalette) {
+      contextPrompt += `\nCurrently displayed palette:\n${JSON.stringify(currentPalette, null, 2)}\n\n`;
     }
 
-    const formattedCombinations = typedSanzoWadaData.combinations.map((combo) => ({
+    // Format combinations compactly (no pretty-print for speed)
+    const formattedCombinations = typedSanzoWadaData.map((combo) => ({
       id: combo.id,
       colors: combo.colors.map((c) => ({
         name: c.name,
@@ -84,37 +81,59 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })),
     }));
 
+    // Separate static content (cacheable) from dynamic content
+    const colorDictionaryText = `Available color combinations from the Sanzo Wada Dictionary (348 total):
+${JSON.stringify(formattedCombinations)}`;
+
     const userPrompt = `${contextPrompt}An artist describes their creative inspiration as: "${mood.trim()}"
 
-      ${
-        conversationHistory && conversationHistory.length > 0
-          ? 'This is a follow-up request. Consider the previous context and refine the palette suggestions accordingly. If they ask to modify the current palettes (e.g., "make it more vibrant"), adjust your selections based on the currently displayed palettes.'
-          : "This is a new request for color palette suggestions."
-      }
+${
+  conversationHistory && conversationHistory.length > 0
+    ? 'This is a follow-up request. Consider the previous context and refine the palette suggestion accordingly. If they ask to modify the current palette (e.g., "make it more vibrant"), adjust your selection based on the currently displayed palette.'
+    : "This is a new request for a color palette suggestion."
+}
 
-      Available color combinations from the Sanzo Wada Dictionary:
-      ${JSON.stringify(formattedCombinations, null, 2)}
+Please analyze this mood/inspiration and select exactly 1 color combination that best captures its essence.
 
-      Please analyze this mood/inspiration and select exactly 3 color combinations that best capture its essence.
+Return your response as a JSON object with this exact structure:
+{
+  "id": 1,
+  "reasoning": "Brief 1-2 sentence explanation of why this palette fits the mood"
+}
 
-      Return your response as a JSON object with this exact structure:
-      {
-        "selections": [
-          {
-            "id": 1,
-            "reasoning": "Brief 1-2 sentence explanation of why this palette fits the mood"
-          }
-        ]
-      }
-
-      Order the selections from best match to good alternatives. The reasoning should help the artist understand your color theory reasoning.`;
+The reasoning should help the artist understand your color theory reasoning.`;
 
     const message = await anthropic.messages.create({
       model: "claude-3-5-haiku-20241022",
-      max_tokens: 1000,
-      system: SYSTEM_PROMPT,
+      max_tokens: 500,
+      system: [
+        {
+          type: "text",
+          text: SYSTEM_PROMPT,
+        },
+        {
+          type: "text",
+          text: colorDictionaryText,
+          cache_control: { type: "ephemeral" },
+        },
+      ],
       messages: [{ role: "user", content: userPrompt }],
     });
+
+    // Log cache performance
+    const usage = message.usage;
+    console.log("API Usage:", {
+      input_tokens: usage.input_tokens,
+      cache_creation_input_tokens: usage.cache_creation_input_tokens || 0,
+      cache_read_input_tokens: usage.cache_read_input_tokens || 0,
+      output_tokens: usage.output_tokens,
+    });
+
+    if (usage.cache_read_input_tokens && usage.cache_read_input_tokens > 0) {
+      console.log("✅ Cache HIT - Using cached color data");
+    } else if (usage.cache_creation_input_tokens && usage.cache_creation_input_tokens > 0) {
+      console.log("📝 Cache MISS - Created new cache");
+    }
 
     const responseText = message.content
       .filter((b: any) => b.type === "text")
@@ -145,39 +164,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
-    if (!llmResponse.selections || !Array.isArray(llmResponse.selections)) {
+    if (!llmResponse.id || typeof llmResponse.id !== "number") {
       return res.status(500).json({ error: "Invalid AI response format" });
     }
 
-    // Map IDs to full palette objects
-    const palettes = llmResponse.selections
-      .map((selection) => {
-        const combination = typedSanzoWadaData.combinations.find((c) => c.id === selection.id);
+    // Find the selected palette
+    const combination = typedSanzoWadaData.find((c) => c.id === llmResponse.id);
 
-        if (!combination) {
-          console.warn(`Combination ${selection.id} not found`);
-          return null;
-        }
-
-        return {
-          id: combination.id,
-          colors: combination.colors,
-          reasoning: selection.reasoning,
-        };
-      })
-      .filter((p): p is NonNullable<typeof p> => p !== null)
-      .slice(0, 3);
-
-    if (palettes.length === 0) {
+    if (!combination) {
       return res.status(500).json({
-        error: "No valid palettes found",
+        error: `Combination ${llmResponse.id} not found`,
       });
     }
 
+    const palette = {
+      id: combination.id,
+      colors: combination.colors,
+      reasoning: llmResponse.reasoning,
+    };
+
     return res.status(200).json({
       mood: mood.trim(),
-      palettes,
-      count: palettes.length,
+      palette,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

@@ -1,7 +1,8 @@
 import { GoldenSection } from "./compositions/GoldenSection";
 import { RuleOfThirds } from "./compositions/RuleOfThirds";
 import { GoldenSpiral } from "./compositions/GoldenSpiral";
-import { ColorCombination } from "../../data/dummy-data";
+import type { PaletteWithReasoning } from "../types/palette";
+import styles from "./SingleCompositionPage.module.css";
 
 export const compositions = [
   { name: "Golden Section", Component: GoldenSection },
@@ -10,7 +11,7 @@ export const compositions = [
 ];
 
 interface SingleCompositionPageProps {
-  combination: ColorCombination;
+  combination: PaletteWithReasoning;
   compositionIndex: number;
   pageNumber: number;
 }
@@ -28,18 +29,43 @@ export function SingleCompositionPage({
 
   const { Component, name } = composition;
 
+  // Extract hex values for the composition components
+  const hexColors = combination.colors.map((c) => c.hex);
+
   return (
-    <div style={{ padding: "2rem", minHeight: "80vh" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        <div style={{ marginBottom: "2rem", textAlign: "center" }}>
-          <h2 style={{ opacity: 0.7, marginBottom: "0.5rem" }}>{name}</h2>
-          <h3 style={{ opacity: 0.5, fontSize: "1rem", fontWeight: "normal" }}>
-            {combination.name}
-          </h3>
+    <div className={styles.compositionPage}>
+      <div className={styles.compositionPageInner}>
+        {/* Composition Name - at the top */}
+        <div className={styles.compositionName}>
+          <h2>{name}</h2>
         </div>
-        <div style={{ maxWidth: "800px", margin: "0 auto", aspectRatio: "1/1" }}>
-          <Component colors={combination.colors} />
+
+        {/* Composition Canvas */}
+        <div className={styles.compositionCanvas}>
+          <Component colors={hexColors} />
         </div>
+
+        {/* Hex Squares - at the bottom */}
+        <div className={styles.hexSquaresList}>
+          {combination.colors.map((color, index) => (
+            <div
+              key={index}
+              className={styles.hexSquare}
+              style={{ backgroundColor: color.hex }}
+              title={color.name}
+            >
+              <span className={styles.hexText}>{color.hex}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* LLM Reasoning */}
+        {combination.reasoning && (
+          <div className={styles.reasoningSection}>
+            <h3 className={styles.reasoningTitle}>Why this palette?</h3>
+            <p className={styles.reasoningText}>{combination.reasoning}</p>
+          </div>
+        )}
       </div>
     </div>
   );
