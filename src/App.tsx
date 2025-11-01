@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { PaletteWithReasoning } from "./types/palette";
 import styles from "./App.module.css";
 
+//TODO: Breakdown this component for better readability
 export default function App() {
   const [mood, setMood] = useState("");
   const [selectedPalette, setSelectedPalette] = useState<PaletteWithReasoning | null>(null);
@@ -200,7 +201,6 @@ export default function App() {
                   <SingleCompositionPage
                     combination={selectedPalette}
                     compositionIndex={currentCompositionIndex}
-                    pageNumber={currentCompositionIndex + 1}
                   />
                 </motion.div>
               </AnimatePresence>

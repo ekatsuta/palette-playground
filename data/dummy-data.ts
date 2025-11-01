@@ -5,7 +5,6 @@ import type {
   PaletteWithReasoning,
 } from "../src/types/palette";
 
-// Export the actual Sanzo Wada data
 export const sanzoWadaData = sanzoWadaColors as SanzoWadaCombination[];
 
 // Mock function to simulate the API response from generate-palette.ts

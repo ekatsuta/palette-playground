@@ -72,18 +72,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       contextPrompt += `\nCurrently displayed palette:\n${JSON.stringify(currentPalette, null, 2)}\n\n`;
     }
 
-    // Format combinations compactly (no pretty-print for speed)
-    const formattedCombinations = typedSanzoWadaData.map((combo) => ({
-      id: combo.id,
-      colors: combo.colors.map((c) => ({
-        name: c.name,
-        hex: c.hex,
-      })),
-    }));
-
     // Separate static content (cacheable) from dynamic content
     const colorDictionaryText = `Available color combinations from the Sanzo Wada Dictionary (348 total):
-${JSON.stringify(formattedCombinations)}`;
+${JSON.stringify(typedSanzoWadaData)}`;
 
     const userPrompt = `${contextPrompt}An artist describes their creative inspiration as: "${mood.trim()}"
 
@@ -120,7 +111,7 @@ The reasoning should help the artist understand your color theory reasoning.`;
       messages: [{ role: "user", content: userPrompt }],
     });
 
-    // Log cache performance
+    // Log cache performance (Remove once performance verified)
     const usage = message.usage;
     console.log("API Usage:", {
       input_tokens: usage.input_tokens,

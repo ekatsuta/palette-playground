@@ -13,13 +13,11 @@ export const compositions = [
 interface SingleCompositionPageProps {
   combination: PaletteWithReasoning;
   compositionIndex: number;
-  pageNumber: number;
 }
 
 export function SingleCompositionPage({
   combination,
   compositionIndex,
-  pageNumber,
 }: SingleCompositionPageProps) {
   const composition = compositions[compositionIndex];
 
@@ -29,23 +27,19 @@ export function SingleCompositionPage({
 
   const { Component, name } = composition;
 
-  // Extract hex values for the composition components
   const hexColors = combination.colors.map((c) => c.hex);
 
   return (
     <div className={styles.compositionPage}>
       <div className={styles.compositionPageInner}>
-        {/* Composition Name - at the top */}
         <div className={styles.compositionName}>
           <h2>{name}</h2>
         </div>
 
-        {/* Composition Canvas */}
         <div className={styles.compositionCanvas}>
           <Component colors={hexColors} />
         </div>
 
-        {/* Hex Squares - at the bottom */}
         <div className={styles.hexSquaresList}>
           {combination.colors.map((color, index) => (
             <div
@@ -59,7 +53,6 @@ export function SingleCompositionPage({
           ))}
         </div>
 
-        {/* LLM Reasoning */}
         {combination.reasoning && (
           <div className={styles.reasoningSection}>
             <h3 className={styles.reasoningTitle}>Why this palette?</h3>

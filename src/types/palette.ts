@@ -8,10 +8,8 @@ export interface SanzoWadaCombination {
   colors: SanzoWadaColor[];
 }
 
-// The JSON file is now just an array of combinations
 export type SanzoWadaData = SanzoWadaCombination[];
 
-// For the API response (includes reasoning from LLM)
 export interface PaletteWithReasoning extends SanzoWadaCombination {
   reasoning: string;
 }
