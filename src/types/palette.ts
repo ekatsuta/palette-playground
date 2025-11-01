@@ -8,18 +8,8 @@ export interface SanzoWadaCombination {
   colors: SanzoWadaColor[];
 }
 
-export interface SanzoWadaData {
-  metadata: {
-    source: string;
-    exported_at: string;
-    total_combinations: number;
-    version: string;
-    detailed: boolean;
-  };
-  combinations: SanzoWadaCombination[];
-}
+export type SanzoWadaData = SanzoWadaCombination[];
 
-// For the API response (includes reasoning from LLM)
 export interface PaletteWithReasoning extends SanzoWadaCombination {
   reasoning: string;
 }
@@ -28,14 +18,13 @@ export interface PaletteWithReasoning extends SanzoWadaCombination {
 export interface GeneratePalettesRequest {
   mood: string;
   conversationHistory?: ConversationMessage[];
-  currentPalettes?: PaletteWithReasoning[];
+  currentPalette?: PaletteWithReasoning;
 }
 
 // API Response type
 export interface GeneratePalettesResponse {
   mood: string;
-  palettes: PaletteWithReasoning[];
-  count: number;
+  palette: PaletteWithReasoning;
   timestamp: string;
 }
 

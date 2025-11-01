@@ -1,182 +1,119 @@
-# Palette
+# Palette Playground
 
-An AI-powered serverless API that generates color palette suggestions based on mood descriptions, drawing from the legendary **Sanzo Wada Dictionary of Color Combinations** (1933).
+An AI-powered color palette discovery tool that generates harmonious color combinations based on mood descriptions, drawing from the legendary **Sanzo Wada Dictionary of Color Combinations** (1933).
 
-This application uses Claude AI to interpret artistic inspirations and moods, then intelligently selects color palettes from Sanzo Wada's 348 carefully curated combinations that capture Japanese perceptions of color harmony and emotion.
+## About
 
-## Features
+This application uses Claude AI to interpret artistic inspirations and moods, then intelligently selects a perfect palette from Sanzo Wada's 348 carefully curated color combinations. Each palette is displayed through multiple composition styles (Golden Section, Rule of Thirds, Golden Spiral) with reasoning explaining why it was chosen.
 
-- **Serverless API**: Built with Vercel serverless functions for automatic scaling and cost-efficiency
-- **AI-Driven Selection**: Uses Claude 3.5 Haiku to analyze mood descriptions and match them with appropriate color combinations
-- **Sanzo Wada Dictionary**: Access to all 348 authentic color combinations from the 1933 reference work
-- **Conversational Support**: Iterative refinement through conversation history
-- **RESTful Design**: Simple HTTP API for easy integration
-
-## About the Sanzo Wada Dictionary
+### The Sanzo Wada Dictionary
 
 The Sanzo Wada Dictionary of Color Combinations is a legendary reference work created by Japanese artist Sanzo Wada in 1933. It contains 348 meticulously crafted color palettes that reflect Japanese aesthetic principles and the psychology of color.
 
-## Deployment
+## Features
 
-This project is configured for automatic deployment to Vercel.
+- **AI-powered selection** using Claude 3.5 Haiku
+- **Interactive composition views** to explore each palette
+- **Reasoning explanations** for every palette selection
+- **Keyboard navigation** between composition styles
+- **Mock/Production toggle** for testing without API calls
 
-### Automatic Deployments
+## Getting Started
 
-- **Production**: Pushes to the `main` branch automatically deploy to production
-- **Preview**: Pull requests automatically generate preview deployments for testing
+### Prerequisites
 
-### Manual Deployment
+- Node.js 18+
+- Anthropic API key (for production)
 
-To deploy manually using the Vercel CLI:
+### Installation
 
 ```bash
-# Install Vercel CLI globally
-npm i -g vercel
+# Install dependencies
+npm install
 
-# Deploy to preview
-vercel
+# Copy environment variables
+cp .env.example .env
 
-# Deploy to production
-vercel --prod
+# Add your API key to .env
 ```
 
-### Build Configuration
+### Development
 
-Vercel automatically detects Vite and uses the following settings:
+#### With Mock API (no LLM calls)
 
-- **Build Command**: `npm run build`
-- **Output Directory**: `dist`
-- **Install Command**: `npm install`
+```bash
+# In .env
+VITE_USE_MOCK_API=true
 
-### Environment Variables
+# Run dev server
+npm run dev
+```
 
-If your application requires environment variables, add them in the Vercel dashboard:
+Visit `http://localhost:5173`
 
-1. Go to your project settings
-2. Navigate to Environment Variables
-3. Add variables prefixed with `VITE_` to make them accessible in your app
+#### With Production API (real LLM calls)
 
-## API Documentation
+```bash
+# In .env
+VITE_USE_MOCK_API=false
+ANTHROPIC_API_KEY=your_key_here
 
-### Generate Color Palettes
+# Run with API support
+npm run dev:api
+```
 
-Generate color palette suggestions from the Sanzo Wada Dictionary based on mood descriptions.
+Visit `http://localhost:3000`
+
+## Environment Variables
+
+```bash
+# Toggle between mock and production API
+VITE_USE_MOCK_API=true
+
+# Your Anthropic API key
+ANTHROPIC_API_KEY=your_api_key_here
+```
+
+## API Usage
 
 **Endpoint:** `POST /api/generate-palette`
 
-**Request Headers:**
+**Request:**
 
-```
-Content-Type: application/json
-```
-
-**Request Body:**
-
-```typescript
+```json
 {
-  "mood": string,                      // Required: Description of mood/inspiration (max 500 chars)
-  "conversationHistory"?: Array<{      // Optional: Previous conversation context
-    "role": "user" | "assistant",
-    "content": string | Array,
-    "timestamp"?: number
-  }>,
-  "currentPalettes"?: Array<{          // Optional: Currently displayed palettes
-    "id": number,
-    "colors": Array<{
-      "name": string,
-      "hex": string
-    }>,
-    "reasoning": string
-  }>
+  "mood": "The quiet melancholy of rain on autumn leaves"
 }
 ```
 
-**Response (200 OK):**
+**Response:**
 
-```typescript
+```json
 {
-  "mood": string,                      // The mood/inspiration that was analyzed
-  "palettes": Array<{                  // 3 selected color palettes
-    "id": number,                      // Palette ID from Sanzo Wada Dictionary
-    "colors": Array<{                  // Colors in the palette
-      "name": string,                  // Color name (e.g., "Crimson")
-      "hex": string                    // Hex color code (e.g., "#DC143C")
-    }>,
-    "reasoning": string                // Why this palette was selected
-  }>,
-  "count": number,                     // Number of palettes returned (always 3, for now)
-  "timestamp": string                  // ISO 8601 timestamp
+  "mood": "The quiet melancholy of rain on autumn leaves",
+  "palette": {
+    "id": 1,
+    "colors": [
+      { "name": "English Red", "hex": "#de4500" },
+      { "name": "Cerulian Blue", "hex": "#29bdad" }
+    ],
+    "reasoning": "This palette captures the essence..."
+  },
+  "timestamp": "2025-10-29T..."
 }
 ```
 
-**Error Responses:**
+## Tech Stack
 
-- `400 Bad Request`: Invalid mood description
+- React + TypeScript + Vite
+- Claude 3.5 Haiku (Anthropic)
+- Vercel Serverless Functions
 
-  ```json
-  { "error": "Mood description is required" }
-  ```
-
-- `429 Too Many Requests`: Rate limit exceeded
-
-  ```json
-  { "error": "Rate limit exceeded. Please try again in a moment." }
-  ```
-
-- `500 Internal Server Error`: Server or AI service error
-  ```json
-  {
-    "error": "Internal server error",
-    "message": "Error details (in development mode)"
-  }
-  ```
-
-**Example Requests:**
-
-Basic request:
+## Scripts
 
 ```bash
-curl -X POST http://localhost:3000/api/generate-palette \
-  -H "Content-Type: application/json" \
-  -d '{"mood": "serene morning by the ocean"}'
+npm run dev          # Development (mock API)
+npm run dev:api      # Development (with API)
+npm run build        # Build for production
+npm run format       # Format code with Prettier
 ```
-
-With conversation history:
-
-```bash
-curl -X POST http://localhost:3000/api/generate-palette \
-  -H "Content-Type: application/json" \
-  -d '{
-    "mood": "make it more vibrant",
-    "conversationHistory": [
-      {
-        "role": "user",
-        "content": "serene morning by the ocean"
-      }
-    ]
-  }'
-```
-
-**Local Development:**
-
-To test the API locally, you need to use Vercel CLI (Vite dev server doesn't support API routes):
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Start dev server with API support
-vercel dev
-
-# The server will start on port 3000 (or another available port)
-```
-
-**Environment Variables Required (in .env file):**
-
-- `ANTHROPIC_API_KEY`: Your Anthropic API key for Claude
-
-**Model Information:**
-
-- Uses Claude 3.5 Haiku for fast, cost-effective responses
-- Max response time: ~2-5 seconds
-- Always returns exactly 3 palette suggestions
