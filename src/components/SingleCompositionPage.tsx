@@ -3,11 +3,25 @@ import { RuleOfThirds } from "./compositions/RuleOfThirds";
 import { GoldenSpiral } from "./compositions/GoldenSpiral";
 import type { PaletteWithReasoning } from "../types/palette";
 import styles from "./SingleCompositionPage.module.css";
+import { LShape } from "./compositions/LShape";
+import { DiagonalHarmony } from "./compositions/DiagnoalHarmony";
+import { GoldenTriangles } from "./compositions/GoldenTriangles";
+import { HorizonBalance } from "./compositions/HorizontalBalance";
+import { SymmetricalBalance } from "./compositions/SymmetricalBalance";
+import { RadialBloom } from "./compositions/RadialBloom";
+import { Pyramid } from "./compositions/Pyramid";
 
 export const compositions = [
   { name: "Golden Section", Component: GoldenSection },
   { name: "Rule of Thirds", Component: RuleOfThirds },
   { name: "Golden Spiral", Component: GoldenSpiral },
+  { name: "Golden Triangles", Component: GoldenTriangles },
+  { name: "Horizontal Balance", Component: HorizonBalance },
+  { name: "Diagonal Harmony", Component: DiagonalHarmony },
+  { name: "Symmetrical Balance", Component: SymmetricalBalance },
+  { name: "Radial Bloom", Component: RadialBloom },
+  { name: "Pyramid", Component: Pyramid },
+  { name: "L-Shape", Component: LShape },
 ];
 
 interface SingleCompositionPageProps {

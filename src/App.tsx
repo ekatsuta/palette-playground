@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { SingleCompositionPage, compositions } from "./components/SingleCompositionPage";
+import { LoadingAnimation } from "./components/LoadingAnimation";
 import { generatePalette } from "./utils/api";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { PaletteWithReasoning } from "./types/palette";
@@ -106,16 +107,7 @@ export default function App() {
             transition={{ duration: 0.3 }}
             className={styles.welcomeScreen}
           >
-            <div className={styles.welcomeContent}>
-              <div className={styles.welcomeTextSection}>
-                <div className={styles.welcomeDescription}>
-                  <p>Generating your perfect palette...</p>
-                </div>
-                <div className={styles.welcomeSubdescription}>
-                  <p>Analyzing your mood and selecting the best color combination.</p>
-                </div>
-              </div>
-            </div>
+            <LoadingAnimation />
           </motion.div>
         ) : error ? (
           <motion.div
