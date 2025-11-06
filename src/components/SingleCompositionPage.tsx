@@ -77,13 +77,6 @@ export function SingleCompositionPage({
             </div>
           ))}
         </div>
-
-        {combination.reasoning && (
-          <div className={styles.reasoningSection}>
-            <h3 className={styles.reasoningTitle}>Why this palette?</h3>
-            <p className={styles.reasoningText}>{combination.reasoning}</p>
-          </div>
-        )}
       </div>
 
       {/* Modal for full composition view */}
