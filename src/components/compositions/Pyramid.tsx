@@ -3,6 +3,7 @@ interface PyramidProps {
 }
 
 export function Pyramid({ colors }: PyramidProps) {
+  // Elements are organized to form the shape of a triangle - creates a stable, harmonious, and eye-catching design
   const c = colors.slice(0, 3);
 
   return (

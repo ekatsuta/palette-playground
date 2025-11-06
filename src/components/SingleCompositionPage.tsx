@@ -10,6 +10,10 @@ import { HorizonBalance } from "./compositions/HorizontalBalance";
 import { SymmetricalBalance } from "./compositions/SymmetricalBalance";
 import { RadialBloom } from "./compositions/RadialBloom";
 import { Pyramid } from "./compositions/Pyramid";
+import { SCurveComposition } from "./compositions/SCurve";
+import { SpiralSection } from "./compositions/SpiralSection";
+import { CircularComposition } from "./compositions/Circular";
+import { FulcrumComposition } from "./compositions/Fulcrum";
 
 export const compositions = [
   { name: "Golden Section", Component: GoldenSection },
@@ -22,6 +26,10 @@ export const compositions = [
   { name: "Radial Bloom", Component: RadialBloom },
   { name: "Pyramid", Component: Pyramid },
   { name: "L-Shape", Component: LShape },
+  { name: "Fulcrum", Component: FulcrumComposition },
+  { name: "S-Curve", Component: SCurveComposition },
+  { name: "Spiral Section", Component: SpiralSection },
+  { name: "Circular", Component: CircularComposition },
 ];
 
 interface SingleCompositionPageProps {

@@ -3,6 +3,7 @@ interface RadialBloomProps {
 }
 
 export function RadialBloom({ colors }: RadialBloomProps) {
+  // Elements arranged around a central point, radiating outward like the petals of a flower or spokes on a wheel
   const c = colors;
   const segments = 8;
   const angleStep = 360 / segments;

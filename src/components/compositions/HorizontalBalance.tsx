@@ -3,6 +3,7 @@ interface HorizonBalanceProps {
 }
 
 export function HorizonBalance({ colors }: HorizonBalanceProps) {
+  // Use of horizontal lines to create stability or tension
   const c = colors.slice(0, 3);
 
   return (

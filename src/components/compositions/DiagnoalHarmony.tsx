@@ -3,6 +3,7 @@ interface DiagonalHarmonyProps {
 }
 
 export function DiagonalHarmony({ colors }: DiagonalHarmonyProps) {
+  // Strong diagonal line or shape that cuts across the picture plane
   const c = colors.slice(0, 4);
 
   return (

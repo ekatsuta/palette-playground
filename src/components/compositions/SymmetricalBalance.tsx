@@ -3,6 +3,7 @@ interface SymmetricalBalanceProps {
 }
 
 export function SymmetricalBalance({ colors }: SymmetricalBalanceProps) {
+  // Elements arranged equally on either side of a central axis - creates a mirror-like effect that conveys stability, order, and harmony
   const c = colors.slice(0, 3);
 
   return (
