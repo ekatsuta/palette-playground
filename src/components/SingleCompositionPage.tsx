@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { GoldenSection } from "./compositions/GoldenSection";
 import { RuleOfThirds } from "./compositions/RuleOfThirds";
 import { GoldenSpiral } from "./compositions/GoldenSpiral";
@@ -14,6 +15,7 @@ import { SCurveComposition } from "./compositions/SCurve";
 import { SpiralSection } from "./compositions/SpiralSection";
 import { CircularComposition } from "./compositions/Circular";
 import { FulcrumComposition } from "./compositions/Fulcrum";
+import { CompositionModal } from "./CompositionModal";
 
 export const compositions = [
   { name: "Golden Section", Component: GoldenSection },
@@ -41,6 +43,7 @@ export function SingleCompositionPage({
   combination,
   compositionIndex,
 }: SingleCompositionPageProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const composition = compositions[compositionIndex];
 
   if (!composition) {
@@ -58,7 +61,7 @@ export function SingleCompositionPage({
           <h2>{name}</h2>
         </div>
 
-        <div className={styles.compositionCanvas}>
+        <div className={styles.compositionCanvas} onClick={() => setIsModalOpen(true)}>
           <Component colors={hexColors} />
         </div>
 
@@ -82,6 +85,11 @@ export function SingleCompositionPage({
           </div>
         )}
       </div>
+
+      {/* Modal for full composition view */}
+      <CompositionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Component colors={hexColors} />
+      </CompositionModal>
     </div>
   );
 }

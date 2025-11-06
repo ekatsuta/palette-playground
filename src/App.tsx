@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { SingleCompositionPage, compositions } from "./components/SingleCompositionPage";
+import { SummaryPage } from "./components/SummaryPage";
 import { LoadingAnimation } from "./components/LoadingAnimation";
 import { generatePalette } from "./utils/api";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -16,8 +17,8 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Total number of compositions to paginate through
-  const totalPages = compositions.length;
+  // Total number of pages to paginate through (summary + compositions)
+  const totalPages = compositions.length + 1;
 
   // Call API to generate palette based on mood
   const handleSubmit = async (e: React.FormEvent) => {
@@ -81,7 +82,7 @@ export default function App() {
       <div className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.headerInner}>
-            <h1 className={styles.headerTitle}>Color Playground</h1>
+            <h1 className={styles.headerTitle}>Palette Playground</h1>
             <form onSubmit={handleSubmit} className={styles.searchForm}>
               <input
                 type="text"
@@ -148,9 +149,7 @@ export default function App() {
               </div>
 
               <div className={styles.welcomeExamples}>
-                <p className={styles.welcomeExample}>
-                  Try: "The quiet melancholy of rain on autumn leaves"
-                </p>
+                <p className={styles.welcomeExample}>Try: "Ocean meeting sky at dusk"</p>
                 <p className={styles.welcomeExample}>
                   Or: "Electric excitement and urban energy at night"
                 </p>
@@ -190,10 +189,14 @@ export default function App() {
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                 >
-                  <SingleCompositionPage
-                    combination={selectedPalette}
-                    compositionIndex={currentCompositionIndex}
-                  />
+                  {currentCompositionIndex === 0 ? (
+                    <SummaryPage combination={selectedPalette} mood={mood} />
+                  ) : (
+                    <SingleCompositionPage
+                      combination={selectedPalette}
+                      compositionIndex={currentCompositionIndex - 1}
+                    />
+                  )}
                 </motion.div>
               </AnimatePresence>
             )}
