@@ -79,7 +79,6 @@ export function SingleCompositionPage({
         </div>
       </div>
 
-      {/* Modal for full composition view */}
       <CompositionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <Component colors={hexColors} />
       </CompositionModal>

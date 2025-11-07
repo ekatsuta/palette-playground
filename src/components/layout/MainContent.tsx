@@ -4,7 +4,7 @@ import { SummaryPage } from "../pages/SummaryPage";
 import { SingleCompositionPage, compositions } from "../pages/SingleCompositionPage";
 import { LoadingAnimation } from "../ui/LoadingAnimation";
 import type { PaletteWithReasoning } from "../../types/palette";
-import styles from "../../App.module.css";
+import styles from "./MainContent.module.css";
 
 interface MainContentProps {
   isLoading: boolean;
