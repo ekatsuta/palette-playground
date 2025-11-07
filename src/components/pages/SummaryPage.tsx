@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { PaletteWithReasoning } from "../types/palette";
+import type { PaletteWithReasoning } from "../../types/palette";
 import styles from "./SummaryPage.module.css";
 
 interface SummaryPageProps {

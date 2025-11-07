@@ -1,21 +1,21 @@
 import { useState } from "react";
-import { GoldenSection } from "./compositions/GoldenSection";
-import { RuleOfThirds } from "./compositions/RuleOfThirds";
-import { GoldenSpiral } from "./compositions/GoldenSpiral";
-import type { PaletteWithReasoning } from "../types/palette";
+import { GoldenSection } from "../compositions/GoldenSection";
+import { RuleOfThirds } from "../compositions/RuleOfThirds";
+import { GoldenSpiral } from "../compositions/GoldenSpiral";
+import type { PaletteWithReasoning } from "../../types/palette";
 import styles from "./SingleCompositionPage.module.css";
-import { LShape } from "./compositions/LShape";
-import { DiagonalHarmony } from "./compositions/DiagnoalHarmony";
-import { GoldenTriangles } from "./compositions/GoldenTriangles";
-import { HorizonBalance } from "./compositions/HorizontalBalance";
-import { SymmetricalBalance } from "./compositions/SymmetricalBalance";
-import { RadialBloom } from "./compositions/RadialBloom";
-import { Pyramid } from "./compositions/Pyramid";
-import { SCurveComposition } from "./compositions/SCurve";
-import { SpiralSection } from "./compositions/SpiralSection";
-import { CircularComposition } from "./compositions/Circular";
-import { FulcrumComposition } from "./compositions/Fulcrum";
-import { CompositionModal } from "./CompositionModal";
+import { LShape } from "../compositions/LShape";
+import { DiagonalHarmony } from "../compositions/DiagnoalHarmony";
+import { GoldenTriangles } from "../compositions/GoldenTriangles";
+import { HorizonBalance } from "../compositions/HorizontalBalance";
+import { SymmetricalBalance } from "../compositions/SymmetricalBalance";
+import { RadialBloom } from "../compositions/RadialBloom";
+import { Pyramid } from "../compositions/Pyramid";
+import { SCurveComposition } from "../compositions/SCurve";
+import { SpiralSection } from "../compositions/SpiralSection";
+import { CircularComposition } from "../compositions/Circular";
+import { FulcrumComposition } from "../compositions/Fulcrum";
+import { CompositionModal } from "../ui/CompositionModal";
 
 export const compositions = [
   { name: "Golden Section", Component: GoldenSection },
