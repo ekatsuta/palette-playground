@@ -1,19 +1,21 @@
-import { GoldenSection } from "./compositions/GoldenSection";
-import { RuleOfThirds } from "./compositions/RuleOfThirds";
-import { GoldenSpiral } from "./compositions/GoldenSpiral";
-import type { PaletteWithReasoning } from "../types/palette";
+import { useState } from "react";
+import { GoldenSection } from "../compositions/GoldenSection";
+import { RuleOfThirds } from "../compositions/RuleOfThirds";
+import { GoldenSpiral } from "../compositions/GoldenSpiral";
+import type { PaletteWithReasoning } from "../../types/palette";
 import styles from "./SingleCompositionPage.module.css";
-import { LShape } from "./compositions/LShape";
-import { DiagonalHarmony } from "./compositions/DiagnoalHarmony";
-import { GoldenTriangles } from "./compositions/GoldenTriangles";
-import { HorizonBalance } from "./compositions/HorizontalBalance";
-import { SymmetricalBalance } from "./compositions/SymmetricalBalance";
-import { RadialBloom } from "./compositions/RadialBloom";
-import { Pyramid } from "./compositions/Pyramid";
-import { SCurveComposition } from "./compositions/SCurve";
-import { SpiralSection } from "./compositions/SpiralSection";
-import { CircularComposition } from "./compositions/Circular";
-import { FulcrumComposition } from "./compositions/Fulcrum";
+import { LShape } from "../compositions/LShape";
+import { DiagonalHarmony } from "../compositions/DiagnoalHarmony";
+import { GoldenTriangles } from "../compositions/GoldenTriangles";
+import { HorizonBalance } from "../compositions/HorizontalBalance";
+import { SymmetricalBalance } from "../compositions/SymmetricalBalance";
+import { RadialBloom } from "../compositions/RadialBloom";
+import { Pyramid } from "../compositions/Pyramid";
+import { SCurveComposition } from "../compositions/SCurve";
+import { SpiralSection } from "../compositions/SpiralSection";
+import { CircularComposition } from "../compositions/Circular";
+import { FulcrumComposition } from "../compositions/Fulcrum";
+import { CompositionModal } from "../ui/CompositionModal";
 
 export const compositions = [
   { name: "Golden Section", Component: GoldenSection },
@@ -41,6 +43,7 @@ export function SingleCompositionPage({
   combination,
   compositionIndex,
 }: SingleCompositionPageProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const composition = compositions[compositionIndex];
 
   if (!composition) {
@@ -58,7 +61,7 @@ export function SingleCompositionPage({
           <h2>{name}</h2>
         </div>
 
-        <div className={styles.compositionCanvas}>
+        <div className={styles.compositionCanvas} onClick={() => setIsModalOpen(true)}>
           <Component colors={hexColors} />
         </div>
 
@@ -74,14 +77,11 @@ export function SingleCompositionPage({
             </div>
           ))}
         </div>
-
-        {combination.reasoning && (
-          <div className={styles.reasoningSection}>
-            <h3 className={styles.reasoningTitle}>Why this palette?</h3>
-            <p className={styles.reasoningText}>{combination.reasoning}</p>
-          </div>
-        )}
       </div>
+
+      <CompositionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Component colors={hexColors} />
+      </CompositionModal>
     </div>
   );
 }
