@@ -9,8 +9,20 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 2rem;
+  padding: 0.5rem;
   animation: fadeIn 0.2s ease-out;
+}
+
+@media (min-width: 640px) {
+  .overlay {
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .overlay {
+    padding: 2rem;
+  }
 }
 
 @keyframes fadeIn {
@@ -24,11 +36,20 @@
 
 .modalWrapper {
   position: relative;
-  width: 95vw;
-  height: 95vh;
-  max-width: 95vh;
-  max-height: 95vh;
+  width: 98vw;
+  height: 98vh;
+  max-width: 98vh;
+  max-height: 98vh;
   animation: slideUp 0.3s ease-out;
+}
+
+@media (min-width: 640px) {
+  .modalWrapper {
+    width: 95vw;
+    height: 95vh;
+    max-width: 95vh;
+    max-height: 95vh;
+  }
 }
 
 @keyframes slideUp {
@@ -44,23 +65,45 @@
 
 .closeButton {
   position: absolute;
-  top: 0.25rem;
-  right: 0.25rem;
-  background: transparent;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
   border: none;
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(0, 0, 0, 0.6);
   z-index: 2;
+  border-radius: 50%;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 640px) {
+  .closeButton {
+    top: 0.25rem;
+    right: 0.25rem;
+    background: transparent;
+    padding: 0.25rem;
+    color: rgba(0, 0, 0, 0.4);
+  }
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 1);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.closeButton:active {
+  transform: scale(0.95);
 }
 
 .content {
   width: 100%;
   height: 100%;
-  border: 1rem solid white;
+  border: 0.5rem solid white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,7 +111,33 @@
   position: relative;
 }
 
+@media (min-width: 640px) {
+  .content {
+    border: 0.75rem solid white;
+  }
+}
+
+@media (min-width: 768px) {
+  .content {
+    border: 1rem solid white;
+  }
+}
+
 .content > *:not(button) {
-  width: calc(100% - 2rem);
-  height: calc(100% - 2rem);
+  width: calc(100% - 1rem);
+  height: calc(100% - 1rem);
+}
+
+@media (min-width: 640px) {
+  .content > *:not(button) {
+    width: calc(100% - 1.5rem);
+    height: calc(100% - 1.5rem);
+  }
+}
+
+@media (min-width: 768px) {
+  .content > *:not(button) {
+    width: calc(100% - 2rem);
+    height: calc(100% - 2rem);
+  }
 }

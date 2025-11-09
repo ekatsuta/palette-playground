@@ -4,7 +4,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4rem 2rem;
+  padding: 2rem 1rem;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 3rem 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 4rem 2rem;
+  }
 }
 
 .content {
@@ -12,30 +27,68 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: 2.5rem;
+}
+
+@media (min-width: 640px) {
+  .content {
+    gap: 3rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .content {
+    gap: 4rem;
+  }
 }
 
 .moodSection {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  padding-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .moodSection {
+    gap: 0.75rem;
+    padding-bottom: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .moodSection {
+    padding-bottom: 2.5rem;
+  }
 }
 
 .sectionLabel {
   opacity: 0.3;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.15em;
   font-variant: small-caps;
 }
 
+@media (min-width: 640px) {
+  .sectionLabel {
+    font-size: 0.75rem;
+  }
+}
+
 .moodText {
   opacity: 0.7;
-  font-size: 1.125rem;
-  line-height: 1.8;
+  font-size: 1rem;
+  line-height: 1.7;
   font-style: italic;
+}
+
+@media (min-width: 640px) {
+  .moodText {
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
 }
 
 .paletteId {
@@ -44,8 +97,16 @@
 
 .colorSwatches {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
   justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 640px) {
+  .colorSwatches {
+    gap: 0.75rem;
+    flex-wrap: nowrap;
+  }
 }
 
 .swatchWrapper {
@@ -53,11 +114,32 @@
 }
 
 .swatch {
-  width: 5rem;
-  height: 8rem;
+  width: 3.5rem;
+  height: 6rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.5s ease-out;
   cursor: pointer;
+}
+
+@media (min-width: 480px) {
+  .swatch {
+    width: 4.5rem;
+    height: 7rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .swatch {
+    width: 5rem;
+    height: 8rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .swatch {
+    width: 6rem;
+    height: 10rem;
+  }
 }
 
 .swatch:hover {
@@ -66,11 +148,8 @@
   transform: scale(1.02);
 }
 
-@media (min-width: 768px) {
-  .swatch {
-    width: 6rem;
-    height: 10rem;
-  }
+.swatch:active {
+  transform: scale(0.98);
 }
 
 .tooltip {
@@ -102,9 +181,22 @@
 .reasoningSection {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  padding-top: 3rem;
+  padding-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .reasoningSection {
+    gap: 1.5rem;
+    padding-top: 2.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .reasoningSection {
+    padding-top: 3rem;
+  }
 }
 
 .reasoningSection .sectionLabel {
@@ -116,18 +208,37 @@
   text-align: center;
   max-width: 42rem;
   margin: 0 auto;
-  line-height: 1.9;
-  font-size: 0.9375rem;
+  line-height: 1.7;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 640px) {
+  .reasoningText {
+    font-size: 0.9375rem;
+    line-height: 1.9;
+  }
 }
 
 .hintSection {
   text-align: center;
-  padding-top: 2rem;
+  padding-top: 1.5rem;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 640px) {
+  .hintSection {
+    padding-top: 2rem;
+  }
 }
 
 .hintText {
   opacity: 0.2;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.05em;
+}
+
+@media (min-width: 640px) {
+  .hintText {
+    font-size: 0.75rem;
+  }
 }

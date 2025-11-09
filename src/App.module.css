@@ -2,4 +2,6 @@
 .appContainer {
   min-height: 100vh;
   background-color: white;
+  overflow-x: hidden;
+  position: relative;
 }
