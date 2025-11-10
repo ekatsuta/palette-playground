@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useSwipeable } from "react-swipeable";
 import { SummaryPage } from "../pages/SummaryPage";
 import { SingleCompositionPage, compositions } from "../pages/SingleCompositionPage";
 import { LoadingAnimation } from "../ui/LoadingAnimation";
@@ -31,6 +32,14 @@ export default function MainContent({
 }: MainContentProps) {
   const totalPages = compositions.length + 1;
   const showResults = palette !== null;
+
+  // Swipe handlers for mobile
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => hasNext && onNext(),
+    onSwipedRight: () => hasPrevious && onPrevious(),
+    trackMouse: false, // Only track touch events, not mouse
+    preventScrollOnSwipe: true,
+  });
 
   return (
     <div className={styles.mainContent}>
@@ -90,7 +99,7 @@ export default function MainContent({
           </div>
         </motion.div>
       ) : (
-        <div className={styles.resultsContainer}>
+        <div {...swipeHandlers} className={styles.resultsContainer}>
           {/* Navigation arrows */}
           {hasPrevious && (
             <button
