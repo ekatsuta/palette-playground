@@ -53,10 +53,10 @@ export default function MainContent({
           <div className={styles.welcomeContent}>
             <div className={styles.welcomeTextSection}>
               <div className={styles.welcomeDescription}>
-                <p style={{ color: "#d4183d" }}>Error: {error}</p>
+                <p style={{ color: "#d4183d", fontSize: "1rem", opacity: 0.8 }}>{error}</p>
               </div>
               <div className={styles.welcomeSubdescription}>
-                <p>Please try again with a different mood description.</p>
+                <p>Try describing a different mood, feeling, or creative inspiration.</p>
               </div>
             </div>
           </div>
