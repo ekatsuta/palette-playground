@@ -50,28 +50,26 @@
 
 .welcomeDescription p {
   opacity: 0.4;
-  font-size: 0.9375rem;
+  font-size: var(--text-base);
   line-height: 1.8;
   letter-spacing: 0.01em;
 }
 
 @media (min-width: 640px) {
   .welcomeDescription p {
-    font-size: 1rem;
     line-height: 2;
   }
 }
 
 .welcomeSubdescription p {
   opacity: 0.25;
-  font-size: 0.8125rem;
+  font-size: var(--text-sm);
   line-height: 1.7;
   letter-spacing: 0.01em;
 }
 
 @media (min-width: 640px) {
   .welcomeSubdescription p {
-    font-size: 0.875rem;
     line-height: 1.9;
   }
 }
@@ -89,14 +87,13 @@
 
 .welcomeExample {
   opacity: 0.2;
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   font-style: italic;
   margin-bottom: 0.5rem;
 }
 
 @media (min-width: 640px) {
   .welcomeExample {
-    font-size: 0.75rem;
     margin-bottom: 0.75rem;
   }
 }
@@ -192,12 +189,6 @@
 }
 
 .pageIndicator span {
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   font-family: monospace;
-}
-
-@media (min-width: 640px) {
-  .pageIndicator span {
-    font-size: 0.75rem;
-  }
 }

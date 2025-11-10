@@ -19,12 +19,18 @@ let globalStore: GlobalLimitEntry = {
   resetTime: getNextMidnight(),
 };
 
+// Cleanup tracking
+let lastCleanupTime = Date.now();
+
 // Configuration
 export const RATE_LIMITS = {
   PER_IP_HOURLY: 10,
   PER_IP_DAILY: 30,
   GLOBAL_DAILY: 300,
 };
+
+// Cleanup interval: 10 minutes
+const CLEANUP_INTERVAL = 10 * 60 * 1000;
 
 export interface RateLimitResult {
   allowed: boolean;
@@ -36,11 +42,41 @@ export interface RateLimitResult {
 }
 
 /**
+ * Clean up stale IP entries to prevent memory leaks
+ * Removes entries where both hourly and daily reset times have passed
+ */
+function cleanupStaleEntries(now: number): void {
+  const entriesBefore = Object.keys(ipStore).length;
+
+  for (const ip in ipStore) {
+    const entry = ipStore[ip];
+    // Remove entry if both reset times have passed (IP is no longer active)
+    if (entry.hourlyResetTime < now && entry.dailyResetTime < now) {
+      delete ipStore[ip];
+    }
+  }
+
+  const entriesAfter = Object.keys(ipStore).length;
+  const removed = entriesBefore - entriesAfter;
+
+  if (removed > 0) {
+    console.log(`🧹 Cleaned up ${removed} stale IP entries (${entriesAfter} remaining)`);
+  }
+
+  lastCleanupTime = now;
+}
+
+/**
  * Check if request is allowed based on rate limits
  */
 export function checkRateLimit(req: VercelRequest): RateLimitResult {
   const ip = getClientIP(req);
   const now = Date.now();
+
+  // Periodically clean up stale entries
+  if (now - lastCleanupTime > CLEANUP_INTERVAL) {
+    cleanupStaleEntries(now);
+  }
 
   // Check global daily limit first
   if (globalStore.resetTime < now) {
