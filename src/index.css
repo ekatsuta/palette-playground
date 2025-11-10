@@ -17,6 +17,13 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Type scale */
+  --text-xs: 0.75rem; /* 12px - Labels, tags, captions */
+  --text-sm: 0.875rem; /* 14px - Secondary text, helper text */
+  --text-base: 1rem; /* 16px - Body text (default) */
+  --text-lg: 1.125rem; /* 18px - Section headings */
+  --text-xl: 1.25rem; /* 20px - Page titles */
 }
 
 body {
@@ -24,10 +31,12 @@ body {
   padding: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 #root {
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 h1,

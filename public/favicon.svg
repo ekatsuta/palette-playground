@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Sanzo Wada Palette #250 - Vertical stripes composition -->
+
+  <!-- Sea Green -->
+  <rect x="0" y="0" width="8" height="32" fill="#00b49b"/>
+
+  <!-- Peach Red -->
+  <rect x="8" y="0" width="8" height="32" fill="#f15a30"/>
+
+  <!-- Nile Blue -->
+  <rect x="16" y="0" width="8" height="32" fill="#bce4e5"/>
+
+  <!-- Pyrite Yellow -->
+  <rect x="24" y="0" width="8" height="32" fill="#cab356"/>
+</svg>

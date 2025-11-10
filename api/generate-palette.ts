@@ -1,7 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import Anthropic from "@anthropic-ai/sdk";
+import type { ToolUseBlock } from "@anthropic-ai/sdk/resources/messages";
 import sanzoWadaData from "../data/sanzo-wada-colors.json" with { type: "json" };
 import type { GeneratePalettesRequest, SanzoWadaData } from "../src/types/palette";
+import { checkRateLimit, getRateLimitMessage } from "./rate-limiter.ts";
 
 const typedSanzoWadaData = sanzoWadaData as SanzoWadaData;
 
@@ -22,6 +24,29 @@ interface LLMResponse {
   reasoning: string;
 }
 
+const tools: Anthropic.Tool[] = [
+  {
+    name: "select_palette",
+    description:
+      "Select a color palette from the Sanzo Wada Dictionary that matches the artist's inspiration",
+    input_schema: {
+      type: "object",
+      properties: {
+        id: {
+          type: "number",
+          description: "The ID of the selected palette from the Sanzo Wada Dictionary (1-348)",
+        },
+        reasoning: {
+          type: "string",
+          description:
+            "Brief 1-2 sentence explanation of why this palette fits the mood, focusing on color theory and emotional resonance",
+        },
+      },
+      required: ["id", "reasoning"],
+    },
+  },
+];
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS headers
   res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -39,6 +64,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  // Check rate limits
+  const rateLimitResult = checkRateLimit(req);
+
+  // Add rate limit headers to response
+  res.setHeader("X-RateLimit-Hourly-Remaining", rateLimitResult.hourlyRemaining.toString());
+  res.setHeader("X-RateLimit-Daily-Remaining", rateLimitResult.dailyRemaining.toString());
+  res.setHeader("X-RateLimit-Reset", new Date(rateLimitResult.resetTime).toISOString());
+
+  if (!rateLimitResult.allowed) {
+    return res.status(429).json({
+      error: getRateLimitMessage(rateLimitResult),
+      hourlyRemaining: rateLimitResult.hourlyRemaining,
+      dailyRemaining: rateLimitResult.dailyRemaining,
+      resetTime: rateLimitResult.resetTime,
+      resetMinutes: rateLimitResult.resetMinutes,
+    });
   }
 
   const { mood, conversationHistory, currentPalette } = req.body as GeneratePalettesRequest;
@@ -84,15 +127,7 @@ ${
     : "This is a new request for a color palette suggestion."
 }
 
-Please analyze this mood/inspiration and select exactly 1 color combination that best captures its essence.
-
-Return your response as a JSON object with this exact structure:
-{
-  "id": 1,
-  "reasoning": "Brief 1-2 sentence explanation of why this palette fits the mood"
-}
-
-The reasoning should help the artist understand your color theory reasoning.`;
+Please analyze this mood/inspiration and select exactly 1 color combination that best captures its essence. Use the select_palette tool to return your selection with reasoning that helps the artist understand your color theory logic.`;
 
     const message = await anthropic.messages.create({
       model: "claude-3-5-haiku-20241022",
@@ -109,6 +144,8 @@ The reasoning should help the artist understand your color theory reasoning.`;
         },
       ],
       messages: [{ role: "user", content: userPrompt }],
+      tools: tools,
+      tool_choice: { type: "tool", name: "select_palette" },
     });
 
     // Log cache performance (Remove once performance verified)
@@ -126,37 +163,21 @@ The reasoning should help the artist understand your color theory reasoning.`;
       console.log("📝 Cache MISS - Created new cache");
     }
 
-    const responseText = message.content
-      .filter((b: any) => b.type === "text")
-      .map((b: any) => b.text)
-      .join("\n");
+    // Extract tool use from response
+    const toolUse = message.content.find(
+      (block): block is ToolUseBlock => block.type === "tool_use"
+    );
 
-    if (!responseText) {
-      throw new Error("No text content in model response");
-    }
-
-    let llmResponse: LLMResponse;
-    try {
-      // Try to extract JSON if it's wrapped in markdown code blocks
-      const jsonMatch =
-        responseText.match(/```json\n([\s\S]*?)\n```/) ||
-        responseText.match(/```\n([\s\S]*?)\n```/);
-
-      if (jsonMatch) {
-        llmResponse = JSON.parse(jsonMatch[1]);
-      } else {
-        llmResponse = JSON.parse(responseText);
-      }
-    } catch (parseError) {
-      console.error("Failed to parse LLM response:", responseText);
-      return res.status(500).json({
-        error: "Failed to parse AI response",
-        details: process.env.NODE_ENV === "development" ? responseText : undefined,
-      });
-    }
-
-    if (!llmResponse.id || typeof llmResponse.id !== "number") {
+    if (!toolUse || toolUse.name !== "select_palette") {
+      console.error("No tool use in response:", message.content);
       return res.status(500).json({ error: "Invalid AI response format" });
+    }
+
+    const llmResponse = toolUse.input as LLMResponse;
+
+    // Validate the response
+    if (!llmResponse.id || typeof llmResponse.id !== "number") {
+      return res.status(500).json({ error: "Invalid palette ID in response" });
     }
 
     // Find the selected palette

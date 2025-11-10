@@ -1,45 +1,99 @@
 /* Single Composition Page Container */
 .compositionPage {
-  padding: 2rem;
+  padding: 1rem;
   min-height: 80vh;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+@media (min-width: 640px) {
+  .compositionPage {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .compositionPage {
+    padding: 2rem;
+  }
 }
 
 .compositionPageInner {
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
 }
 
 /* Composition Canvas */
 .compositionCanvas {
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
   aspect-ratio: 1/1;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 640px) {
+  .compositionCanvas {
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 768px) {
+  .compositionCanvas {
+    max-width: 800px;
+  }
 }
 
 /* Composition Name */
 .compositionName {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   text-align: center;
+}
+
+@media (min-width: 640px) {
+  .compositionName {
+    margin-bottom: 2rem;
+  }
 }
 
 .compositionName h2 {
   opacity: 0.7;
-  font-size: 1.25rem;
+  font-size: var(--text-lg);
+}
+
+@media (min-width: 640px) {
+  .compositionName h2 {
+    font-size: var(--text-xl);
+  }
 }
 
 /* Hex Squares List */
 .hexSquaresList {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   justify-content: center;
   flex-wrap: wrap;
 }
 
+@media (min-width: 640px) {
+  .hexSquaresList {
+    margin-top: 2rem;
+    gap: 0.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .hexSquaresList {
+    gap: 1rem;
+  }
+}
+
 .hexSquare {
-  min-width: 5rem;
-  height: 5rem;
+  min-width: 4rem;
+  height: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,6 +103,21 @@
     transform 0.2s,
     border-color 0.2s;
   cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 640px) {
+  .hexSquare {
+    min-width: 4.5rem;
+    height: 4.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .hexSquare {
+    min-width: 5rem;
+    height: 5rem;
+  }
 }
 
 .hexSquare:hover {
@@ -56,8 +125,12 @@
   border-color: rgba(0, 0, 0, 0.3);
 }
 
+.hexSquare:active {
+  transform: translateY(0);
+}
+
 .hexText {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   font-family: monospace;
   font-weight: 500;
   letter-spacing: 0.05em;
@@ -77,7 +150,7 @@
 
 .reasoningTitle {
   opacity: 0.4;
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 1rem;
@@ -85,7 +158,7 @@
 
 .reasoningText {
   opacity: 0.6;
-  font-size: 0.9375rem;
+  font-size: var(--text-base);
   line-height: 1.8;
   font-style: italic;
 }

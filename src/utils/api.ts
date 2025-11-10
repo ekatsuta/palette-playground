@@ -18,8 +18,14 @@ async function generatePaletteProduction(mood: string): Promise<GeneratePalettes
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: "Failed to generate palette" }));
-    throw new Error(error.error || `API error: ${response.status}`);
+    const errorData = await response.json().catch(() => ({ error: "Failed to generate palette" }));
+
+    // For rate limit errors, use the detailed message from the API
+    if (response.status === 429) {
+      throw new Error(errorData.error || "Rate limit exceeded. Please try again later.");
+    }
+
+    throw new Error(errorData.error || `API error: ${response.status}`);
   }
 
   return response.json();
