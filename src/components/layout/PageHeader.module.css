@@ -106,10 +106,10 @@
   padding: 0.5rem 1rem;
   border: 1px solid rgba(0, 0, 0, 0.15);
   background: transparent;
+  color: rgba(0, 0, 0, 0.6);
   font-size: var(--text-xs);
   letter-spacing: 0.05em;
   font-variant: small-caps;
-  opacity: 0.6;
   transition: all 0.2s;
   cursor: pointer;
   white-space: nowrap;
@@ -125,11 +125,11 @@
 .exploreButton:hover {
   border-color: rgba(0, 0, 0, 0.3);
   background-color: rgba(0, 0, 0, 0.02);
-  opacity: 1;
+  color: rgba(0, 0, 0, 1);
 }
 
 .exploreButton:disabled {
-  opacity: 0.3;
+  color: rgba(0, 0, 0, 0.3);
   cursor: not-allowed;
   border-color: rgba(0, 0, 0, 0.1);
 }
@@ -137,5 +137,5 @@
 .exploreButton:disabled:hover {
   border-color: rgba(0, 0, 0, 0.1);
   background-color: transparent;
-  opacity: 0.3;
+  color: rgba(0, 0, 0, 0.3);
 }

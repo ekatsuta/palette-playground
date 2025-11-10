@@ -3,7 +3,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { ToolUseBlock } from "@anthropic-ai/sdk/resources/messages";
 import sanzoWadaData from "../data/sanzo-wada-colors.json" with { type: "json" };
 import type { GeneratePalettesRequest, SanzoWadaData } from "../src/types/palette";
-import { checkRateLimit, getRateLimitMessage } from "./rate-limiter";
+import { checkRateLimit, getRateLimitMessage } from "./rate-limiter.js";
 
 const typedSanzoWadaData = sanzoWadaData as SanzoWadaData;
 
