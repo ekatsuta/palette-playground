@@ -24,11 +24,10 @@ export default function App() {
         setPalette(sharedPalette);
         setSubmittedMood(shareData.mood);
         setCurrentIndex(shareData.pageIndex);
-        // Clear share params from URL
         clearShareParams();
       }
     }
-  }, [setPalette, setCurrentIndex]);
+  }, []);
 
   const handleSubmit = async (mood: string) => {
     setSubmittedMood(mood);
