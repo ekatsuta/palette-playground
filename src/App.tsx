@@ -1,19 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { compositions } from "./components/pages/SingleCompositionPage";
 import { usePagination } from "./hooks/usePagination";
 import { usePaletteGeneration } from "./hooks/usePaletteGeneration";
 import { useKeyboardNavigation } from "./hooks/useKeyboardNavigation";
 import PageHeader from "./components/layout/PageHeader";
 import MainContent from "./components/layout/MainContent";
+import { parseShareUrl, loadPaletteById, clearShareParams } from "./utils/share";
 import styles from "./App.module.css";
 
 export default function App() {
   const [submittedMood, setSubmittedMood] = useState("");
 
-  const { palette, isLoading, error, generate } = usePaletteGeneration();
-  const { currentIndex, goNext, goPrevious, reset, hasNext, hasPrevious } = usePagination(
-    compositions.length + 1
-  );
+  const { palette, setPalette, isLoading, error, generate } = usePaletteGeneration();
+  const { currentIndex, setCurrentIndex, goNext, goPrevious, reset, hasNext, hasPrevious } =
+    usePagination(compositions.length + 2); // Summary + Reasoning + Compositions
+
+  // Handle shared palette URLs on mount
+  useEffect(() => {
+    const shareData = parseShareUrl();
+    if (shareData) {
+      const sharedPalette = loadPaletteById(shareData.paletteId);
+      if (sharedPalette) {
+        setPalette(sharedPalette);
+        setSubmittedMood(shareData.mood);
+        setCurrentIndex(shareData.pageIndex);
+        // Clear share params from URL
+        clearShareParams();
+      }
+    }
+  }, [setPalette, setCurrentIndex]);
 
   const handleSubmit = async (mood: string) => {
     setSubmittedMood(mood);

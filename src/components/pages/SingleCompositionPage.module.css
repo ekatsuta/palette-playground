@@ -78,6 +78,19 @@
   flex-wrap: wrap;
 }
 
+/* Share Section */
+.shareSection {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 640px) {
+  .shareSection {
+    margin-top: 2rem;
+  }
+}
+
 @media (min-width: 640px) {
   .hexSquaresList {
     margin-top: 2rem;

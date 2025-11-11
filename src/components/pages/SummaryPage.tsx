@@ -45,19 +45,9 @@ export function SummaryPage({ combination, mood }: SummaryPageProps) {
           ))}
         </div>
 
-        {/* AI Reasoning */}
-        {combination.reasoning && (
-          <div className={styles.reasoningSection}>
-            <p className={styles.sectionLabel}>Selection Rationale</p>
-            <p className={styles.reasoningText}>{combination.reasoning}</p>
-          </div>
-        )}
-
         {/* Next steps hint */}
         <div className={styles.hintSection}>
-          <p className={styles.hintText}>
-            Navigate right to explore these colors through classical composition principles
-          </p>
+          <p className={styles.hintText}>Navigate right to learn why this palette was selected</p>
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@ export function usePagination(totalPages: number) {
 
   return {
     currentIndex,
+    setCurrentIndex,
     goNext,
     goPrevious,
     reset,

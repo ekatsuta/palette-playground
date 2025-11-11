@@ -108,8 +108,8 @@
 }
 
 .swatch {
-  width: 3.5rem;
-  height: 6rem;
+  width: 4.5rem;
+  height: 8rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.5s ease-out;
   cursor: pointer;
@@ -117,22 +117,22 @@
 
 @media (min-width: 480px) {
   .swatch {
-    width: 4.5rem;
-    height: 7rem;
+    width: 5.5rem;
+    height: 9rem;
   }
 }
 
 @media (min-width: 640px) {
   .swatch {
-    width: 5rem;
-    height: 8rem;
+    width: 6.5rem;
+    height: 10rem;
   }
 }
 
 @media (min-width: 768px) {
   .swatch {
-    width: 6rem;
-    height: 10rem;
+    width: 7.5rem;
+    height: 12rem;
   }
 }
 
