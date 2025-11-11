@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useSwipeable } from "react-swipeable";
 import { SummaryPage } from "../pages/SummaryPage";
+import { ReasoningPage } from "../pages/ReasoningPage";
 import { SingleCompositionPage, compositions } from "../pages/SingleCompositionPage";
 import { LoadingAnimation } from "../ui/LoadingAnimation";
 import type { PaletteWithReasoning } from "../../types/palette";
@@ -29,8 +31,16 @@ export default function MainContent({
   onNext,
   onPrevious,
 }: MainContentProps) {
-  const totalPages = compositions.length + 1;
+  const totalPages = compositions.length + 2; // Summary + Reasoning + Compositions
   const showResults = palette !== null;
+
+  // Swipe handlers for mobile
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => hasNext && onNext(),
+    onSwipedRight: () => hasPrevious && onPrevious(),
+    trackMouse: false, // Only track touch events, not mouse
+    preventScrollOnSwipe: true,
+  });
 
   return (
     <div className={styles.mainContent}>
@@ -76,7 +86,8 @@ export default function MainContent({
               <div className={styles.welcomeSubdescription}>
                 <p>
                   Enter a mood, feeling, or concept above to explore curated combinations from the
-                  Sanzo Wada Dictionary of Color.
+                  Sanzo Wada Dictionary of Color, visualized through fundamental art composition
+                  principles.
                 </p>
               </div>
             </div>
@@ -90,7 +101,7 @@ export default function MainContent({
           </div>
         </motion.div>
       ) : (
-        <div className={styles.resultsContainer}>
+        <div {...swipeHandlers} className={styles.resultsContainer}>
           {/* Navigation arrows */}
           {hasPrevious && (
             <button
@@ -124,10 +135,14 @@ export default function MainContent({
               >
                 {currentIndex === 0 ? (
                   <SummaryPage combination={palette} mood={submittedMood} />
+                ) : currentIndex === 1 ? (
+                  <ReasoningPage combination={palette} />
                 ) : (
                   <SingleCompositionPage
                     combination={palette}
-                    compositionIndex={currentIndex - 1}
+                    compositionIndex={currentIndex - 2}
+                    mood={submittedMood}
+                    pageIndex={currentIndex}
                   />
                 )}
               </motion.div>

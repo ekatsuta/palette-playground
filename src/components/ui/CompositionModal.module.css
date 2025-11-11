@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 0.5rem;
+  padding: 1.5rem 0.5rem;
   animation: fadeIn 0.2s ease-out;
 }
 
@@ -36,10 +36,10 @@
 
 .modalWrapper {
   position: relative;
-  width: 98vw;
-  height: 98vh;
-  max-width: 98vh;
-  max-height: 98vh;
+  width: 95vw;
+  height: 85vh;
+  max-width: 85vh;
+  max-height: 85vh;
   animation: slideUp 0.3s ease-out;
 }
 
@@ -65,16 +65,16 @@
 
 .closeButton {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: rgba(255, 255, 255, 0.9);
+  top: 0.75rem;
+  right: 0.75rem;
+  background: rgba(255, 255, 255, 0.95);
   border: none;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.625rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.7);
   z-index: 2;
   border-radius: 50%;
   transition: all 0.2s;

@@ -38,5 +38,5 @@ export function usePaletteGeneration() {
     }
   };
 
-  return { palette, isLoading, error, generate };
+  return { palette, setPalette, isLoading, error, generate };
 }

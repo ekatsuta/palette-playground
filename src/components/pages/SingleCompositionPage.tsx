@@ -16,6 +16,7 @@ import { SpiralSection } from "../compositions/SpiralSection";
 import { CircularComposition } from "../compositions/Circular";
 import { FulcrumComposition } from "../compositions/Fulcrum";
 import { CompositionModal } from "../ui/CompositionModal";
+import { ShareButton } from "../ui/ShareButton";
 
 export const compositions = [
   { name: "Golden Section", Component: GoldenSection },
@@ -37,11 +38,15 @@ export const compositions = [
 interface SingleCompositionPageProps {
   combination: PaletteWithReasoning;
   compositionIndex: number;
+  mood: string;
+  pageIndex: number;
 }
 
 export function SingleCompositionPage({
   combination,
   compositionIndex,
+  mood,
+  pageIndex,
 }: SingleCompositionPageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const composition = compositions[compositionIndex];
@@ -76,6 +81,15 @@ export function SingleCompositionPage({
               <span className={styles.hexText}>{color.hex}</span>
             </div>
           ))}
+        </div>
+
+        <div className={styles.shareSection}>
+          <ShareButton
+            paletteId={combination.id}
+            pageIndex={pageIndex}
+            mood={mood}
+            compositionName={name}
+          />
         </div>
       </div>
 
