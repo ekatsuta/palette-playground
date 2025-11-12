@@ -4,19 +4,19 @@ An AI-powered color palette discovery tool that generates harmonious color combi
 
 ## About
 
-This application uses Claude AI to interpret artistic inspirations and moods, then intelligently selects a perfect palette from Sanzo Wada's 348 carefully curated color combinations. Each palette is displayed through multiple composition styles (Golden Section, Rule of Thirds, Golden Spiral) with reasoning explaining why it was chosen.
+This application uses Claude AI to interpret artistic inspirations and moods, then intelligently selects a perfect palette from Sanzo Wada's 348 carefully curated color combinations. Each palette is visualized through 14 classical art composition principles. The idea is for these compositional inspirations to serve as a creative jumping-off point for any project — from digital art and painting to photography, illustration, or even knitting!
 
 ### The Sanzo Wada Dictionary
 
-The Sanzo Wada Dictionary of Color Combinations is a legendary reference work created by Japanese artist Sanzo Wada in 1933. It contains 348 meticulously crafted color palettes that reflect Japanese aesthetic principles and the psychology of color.
+The Sanzo Wada Dictionary of Color Combinations is a legendary reference work created by Japanese artist Sanzo Wada in 1933. It contains 348 meticulously crafted color palettes that reflect Japanese aesthetic principles.
 
 ## Features
 
 - **AI-powered selection** using Claude 3.5 Haiku
+- **Structured responses via tool calling** ensuring reliable palette selections and reasoning every time
 - **Interactive composition views** to explore each palette
 - **Reasoning explanations** for every palette selection
 - **Keyboard navigation** between composition styles
-- **Mock/Production toggle** for testing without API calls
 
 ## Getting Started
 
@@ -82,7 +82,7 @@ ANTHROPIC_API_KEY=your_api_key_here
 
 ```json
 {
-  "mood": "The quiet melancholy of rain on autumn leaves"
+  "mood": "Calm horizon between the ocean and the sky"
 }
 ```
 
@@ -90,7 +90,7 @@ ANTHROPIC_API_KEY=your_api_key_here
 
 ```json
 {
-  "mood": "The quiet melancholy of rain on autumn leaves",
+  "mood": "Calm horizon between the ocean and the sky",
   "palette": {
     "id": 1,
     "colors": [
