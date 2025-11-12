@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import Anthropic from "@anthropic-ai/sdk";
 import type { ToolUseBlock } from "@anthropic-ai/sdk/resources/messages";
+import { createClient } from "@supabase/supabase-js";
 import sanzoWadaData from "../data/sanzo-wada-colors.json" with { type: "json" };
 import type { GeneratePalettesRequest, SanzoWadaData } from "../src/types/palette";
 import { checkRateLimit, getRateLimitMessage } from "./rate-limiter.js";
@@ -194,6 +195,25 @@ Please analyze this mood/inspiration and select exactly 1 color combination that
       colors: combination.colors,
       reasoning: llmResponse.reasoning,
     };
+
+    // Log to Supabase for analytics
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY) {
+      try {
+        const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+
+        await supabase.from("palette_generations").insert({
+          mood: mood.trim(),
+          palette_id: combination.id,
+          reasoning: llmResponse.reasoning,
+          colors: combination.colors,
+          user_ip: req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
+          user_agent: req.headers["user-agent"] || null,
+        });
+      } catch (supabaseError) {
+        // Don't fail the request if logging fails
+        console.error("Failed to log to Supabase:", supabaseError);
+      }
+    }
 
     return res.status(200).json({
       mood: mood.trim(),
