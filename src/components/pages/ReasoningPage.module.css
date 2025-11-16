@@ -70,6 +70,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  align-items: center;
 }
 
 @media (min-width: 640px) {
@@ -80,15 +81,18 @@
 
 .reasoningText {
   opacity: 0.6;
-  text-align: center;
-  line-height: 1.8;
-  font-size: var(--text-sm);
+  line-height: 2.2;
+  font-size: var(--text-base);
+  white-space: pre-line;
+  max-width: 32rem;
+  text-align: left;
+  width: 100%;
 }
 
 @media (min-width: 640px) {
   .reasoningText {
-    font-size: var(--text-base);
-    line-height: 2;
+    font-size: var(--text-lg);
+    line-height: 2.5;
   }
 }
 

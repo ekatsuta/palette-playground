@@ -57,7 +57,7 @@ export function loadPaletteById(paletteId: number): PaletteWithReasoning | null 
 
   return {
     ...combination,
-    reasoning: "Shared palette from Sanzo Wada Dictionary of Color Combinations",
+    inspirations: "Shared palette from Sanzo Wada Dictionary of Color Combinations",
   };
 }
 

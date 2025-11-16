@@ -18,19 +18,19 @@ export function mockGeneratePalette(mood: string): Promise<GeneratePalettesRespo
       const randomIndex = Math.floor(Math.random() * sanzoWadaData.length);
       const selectedCombination = sanzoWadaData[randomIndex];
 
-      // Create a mock reasoning based on the mood
-      const mockReasonings = [
-        `This palette captures the essence of "${mood}" through its harmonious blend of colors that evoke both warmth and depth.`,
-        `The color combination perfectly embodies "${mood}" with its balanced interplay of light and shadow tones.`,
-        `Selected for its emotional resonance with "${mood}", this palette creates a cohesive visual narrative.`,
-        `This palette's psychological impact aligns beautifully with the mood of "${mood}", offering both contrast and harmony.`,
+      // Create mock inspirations based on the mood
+      const mockInspirations = [
+        `- Monet's Water Lilies\n- Morning mist\n- Vintage postcards\n- Sea glass collection\n- Garden in spring`,
+        `- Sunset at the beach\n- Warm cinnamon rolls\n- Autumn leaves\n- Van Gogh's Starry Night\n- Cozy fireside`,
+        `- Japanese tea ceremony\n- Cherry blossoms\n- Soft cotton candy\n- Watercolor painting\n- Quiet morning light`,
+        `- Ocean waves\n- Fresh lavender fields\n- Peacock feathers\n- Stained glass windows\n- Butterfly wings`,
       ];
 
-      const reasoning = mockReasonings[Math.floor(Math.random() * mockReasonings.length)];
+      const inspirations = mockInspirations[Math.floor(Math.random() * mockInspirations.length)];
 
       const palette: PaletteWithReasoning = {
         ...selectedCombination,
-        reasoning,
+        inspirations,
       };
 
       const response: GeneratePalettesResponse = {
