@@ -18,88 +18,227 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 70vh;
-  padding: 1.5rem;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  margin-top: -7rem;
 }
 
 @media (min-width: 640px) {
   .welcomeScreen {
-    min-height: 80vh;
-    padding: 2rem;
+    margin-top: -6rem;
   }
 }
 
 .welcomeContent {
-  max-width: 36rem;
-  text-align: center;
+  max-width: 42rem;
+  width: 100%;
 }
 
-.welcomeTextSection {
-  margin-bottom: 2rem;
-}
-
-@media (min-width: 640px) {
-  .welcomeTextSection {
-    margin-bottom: 2.5rem;
+@media (min-width: 768px) {
+  .welcomeContent {
+    max-width: 48rem;
   }
 }
 
-.welcomeDescription {
-  margin-bottom: 1rem;
+/* Title Section */
+.welcomeTitle {
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
-.welcomeDescription p {
-  opacity: 0.4;
+@media (min-width: 768px) {
+  .welcomeTitle {
+    margin-bottom: 4rem;
+  }
+}
+
+.welcomeTitleText {
+  opacity: 0.6;
   font-size: var(--text-base);
+  letter-spacing: 0.15em;
+  font-variant: small-caps;
+  margin-bottom: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .welcomeTitleText {
+    font-size: var(--text-lg);
+  }
+}
+
+.welcomeSubtitle {
+  opacity: 0.35;
+  font-size: var(--text-sm);
   line-height: 1.8;
   letter-spacing: 0.01em;
 }
 
-@media (min-width: 640px) {
-  .welcomeDescription p {
-    line-height: 2;
+@media (min-width: 768px) {
+  .welcomeSubtitle {
+    font-size: var(--text-base);
   }
 }
 
-.welcomeSubdescription p {
+/* Form Section */
+.welcomeForm {
+  margin-bottom: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .welcomeForm {
+    margin-bottom: 3rem;
+  }
+}
+
+.welcomeInputGroup {
+  margin-bottom: 1.25rem;
+}
+
+.welcomeLabel {
+  display: block;
+  text-align: center;
+  opacity: 0.35;
+  font-size: var(--text-xs);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.welcomeInput {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: transparent;
+  text-align: center;
+  font-size: var(--text-base);
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  line-height: 1.6;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+@media (min-width: 768px) {
+  .welcomeInput {
+    font-size: var(--text-lg);
+  }
+}
+
+.welcomeInput:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.welcomeInput:focus {
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.welcomeInput::placeholder {
   opacity: 0.25;
-  font-size: var(--text-sm);
-  line-height: 1.7;
-  letter-spacing: 0.01em;
 }
 
-@media (min-width: 640px) {
-  .welcomeSubdescription p {
-    line-height: 1.9;
+.welcomeInput:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.welcomeButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.welcomeButton {
+  padding: 0.75rem 2.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: transparent;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  font-variant: small-caps;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .welcomeButton {
+    font-size: var(--text-sm);
   }
+}
+
+.welcomeButton:hover:not(:disabled) {
+  border-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.03);
+  color: rgba(0, 0, 0, 1);
+}
+
+.welcomeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Examples Section */
+.welcomeExamplesSection {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding-top: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .welcomeExamplesSection {
+    padding-top: 3rem;
+    margin-bottom: 3rem;
+  }
+}
+
+.welcomeExamplesTitle {
+  opacity: 0.25;
+  text-align: center;
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  font-variant: small-caps;
+  margin-bottom: 1rem;
 }
 
 .welcomeExamples {
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  padding-top: 1.5rem;
-}
-
-@media (min-width: 640px) {
-  .welcomeExamples {
-    padding-top: 2rem;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
 }
 
 .welcomeExample {
-  opacity: 0.2;
-  font-size: var(--text-xs);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  opacity: 0.25;
+  font-size: var(--text-sm);
   font-style: italic;
-  margin-bottom: 0.5rem;
+  transition: opacity 0.2s;
+  padding: 0.5rem;
 }
 
-@media (min-width: 640px) {
-  .welcomeExample {
-    margin-bottom: 0.75rem;
+.welcomeExample:hover {
+  opacity: 0.55;
+}
+
+/* Footer */
+.welcomeFooter {
+  text-align: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding-top: 2.5rem;
+
+  a {
+    text-decoration: underline;
   }
 }
 
-.welcomeExample:last-child {
-  margin-bottom: 0;
+@media (min-width: 768px) {
+  .welcomeFooter {
+    padding-top: 3rem;
+  }
+}
+
+.welcomeFooterText {
+  opacity: 0.2;
+  font-size: var(--text-xs);
+  line-height: 1.8;
 }
 
 /* Results Container */

@@ -37,6 +37,7 @@ export function RotatingInspirations({ inspirations, colors }: RotatingInspirati
     const fadeInEnd = segmentStart + fadeTransition;
     const fadeOutStart = segmentEnd - fadeTransition;
 
+    // 6 points: [before segment, start fade in, end fade in, start fade out, end fade out, after segment]
     return [0, segmentStart, fadeInEnd, fadeOutStart, segmentEnd, 1];
   };
 
@@ -57,7 +58,7 @@ export function RotatingInspirations({ inspirations, colors }: RotatingInspirati
               opacity: {
                 duration: cycleDuration,
                 repeat: Infinity,
-                ease: "easeInOut",
+                ease: "linear",
                 times: getTimings(index),
               },
             }}

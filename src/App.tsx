@@ -9,6 +9,7 @@ import { parseShareUrl, loadPaletteById, clearShareParams } from "./utils/share"
 import styles from "./App.module.css";
 
 export default function App() {
+  const [mood, setMood] = useState("");
   const [submittedMood, setSubmittedMood] = useState("");
 
   const { palette, setPalette, isLoading, error, generate } = usePaletteGeneration();
@@ -35,6 +36,13 @@ export default function App() {
     await generate(mood);
   };
 
+  const handleReset = () => {
+    setPalette(null);
+    setMood("");
+    setSubmittedMood("");
+    reset();
+  };
+
   // Keyboard navigation - only enabled when palette is shown
   useKeyboardNavigation(
     {
@@ -44,19 +52,26 @@ export default function App() {
     { enabled: !!palette }
   );
 
+  const showHeader = palette !== null || isLoading;
+
   return (
     <div className={styles.appContainer}>
-      <PageHeader onSubmit={handleSubmit} isLoading={isLoading} />
+      {showHeader && (
+        <PageHeader onSubmit={handleSubmit} isLoading={isLoading} onReset={handleReset} />
+      )}
       <MainContent
         isLoading={isLoading}
         error={error}
         palette={palette}
+        mood={mood}
+        setMood={setMood}
         submittedMood={submittedMood}
         currentIndex={currentIndex}
         hasNext={hasNext}
         hasPrevious={hasPrevious}
         onNext={goNext}
         onPrevious={goPrevious}
+        onSubmit={handleSubmit}
       />
     </div>
   );
