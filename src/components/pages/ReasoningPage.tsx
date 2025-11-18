@@ -1,4 +1,5 @@
 import type { PaletteWithReasoning } from "../../types/palette";
+import { RotatingInspirations } from "../ui/RotatingInspirations";
 import styles from "./ReasoningPage.module.css";
 
 interface ReasoningPageProps {
@@ -10,11 +11,14 @@ export function ReasoningPage({ combination }: ReasoningPageProps) {
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.titleSection}>
-          <h2 className={styles.title}>Why was this palette chosen?</h2>
+          <h2 className={styles.title}>These colors remind us of...</h2>
         </div>
 
         <div className={styles.reasoningSection}>
-          <p className={styles.reasoningText}>{combination.reasoning}</p>
+          <RotatingInspirations
+            inspirations={combination.inspirations}
+            colors={combination.colors}
+          />
         </div>
 
         <div className={styles.hintSection}>

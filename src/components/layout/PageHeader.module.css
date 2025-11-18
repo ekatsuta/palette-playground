@@ -51,6 +51,20 @@
   font-size: var(--text-xs);
   letter-spacing: 0.15em;
   font-variant: small-caps;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  font-family: inherit;
+}
+
+.headerTitle:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.headerTitle:disabled {
+  cursor: default;
 }
 
 @media (min-width: 640px) {

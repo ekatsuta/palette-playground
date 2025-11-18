@@ -11,7 +11,7 @@ export interface SanzoWadaCombination {
 export type SanzoWadaData = SanzoWadaCombination[];
 
 export interface PaletteWithReasoning extends SanzoWadaCombination {
-  reasoning: string;
+  inspirations: string;
 }
 
 // API Request type

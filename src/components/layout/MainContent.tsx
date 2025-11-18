@@ -1,3 +1,4 @@
+import type { Dispatch, SetStateAction } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useSwipeable } from "react-swipeable";
@@ -11,6 +12,8 @@ import styles from "./MainContent.module.css";
 interface MainContentProps {
   isLoading: boolean;
   error: string | null;
+  mood: string;
+  setMood: Dispatch<SetStateAction<string>>;
   palette: PaletteWithReasoning | null;
   submittedMood: string;
   currentIndex: number;
@@ -18,11 +21,14 @@ interface MainContentProps {
   hasPrevious: boolean;
   onNext: () => void;
   onPrevious: () => void;
+  onSubmit: (mood: string) => void;
 }
 
 export default function MainContent({
   isLoading,
   error,
+  mood,
+  setMood,
   palette,
   submittedMood,
   currentIndex,
@@ -30,9 +36,17 @@ export default function MainContent({
   hasPrevious,
   onNext,
   onPrevious,
+  onSubmit,
 }: MainContentProps) {
   const totalPages = compositions.length + 2; // Summary + Reasoning + Compositions
   const showResults = palette !== null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (mood.trim()) {
+      onSubmit(mood);
+    }
+  };
 
   // Swipe handlers for mobile
   const swipeHandlers = useSwipeable({
@@ -79,23 +93,67 @@ export default function MainContent({
           className={styles.welcomeScreen}
         >
           <div className={styles.welcomeContent}>
-            <div className={styles.welcomeTextSection}>
-              <div className={styles.welcomeDescription}>
-                <p>Discover harmonious color palettes inspired by your creative vision.</p>
+            {/* Title */}
+            <div className={styles.welcomeTitle}>
+              <h1 className={styles.welcomeTitleText}>Palette Playground</h1>
+              <p className={styles.welcomeSubtitle}>
+                Discover harmonious color palettes inspired by your creative vision
+              </p>
+            </div>
+
+            {/* Prominent centered input */}
+            <form onSubmit={handleSubmit} className={styles.welcomeForm}>
+              <div className={styles.welcomeInputGroup}>
+                <label className={styles.welcomeLabel}>Describe a mood, feeling, or concept</label>
+                <input
+                  type="text"
+                  value={mood}
+                  onChange={(e) => setMood(e.target.value)}
+                  placeholder="Type your inspiration here"
+                  className={styles.welcomeInput}
+                  disabled={isLoading}
+                />
               </div>
-              <div className={styles.welcomeSubdescription}>
-                <p>
-                  Enter a mood, feeling, or concept above to explore curated combinations from the
-                  Sanzo Wada Dictionary of Color, visualized through fundamental art composition
-                  principles.
-                </p>
+
+              <div className={styles.welcomeButtonContainer}>
+                <button type="submit" className={styles.welcomeButton} disabled={isLoading}>
+                  Explore Colors
+                </button>
+              </div>
+            </form>
+
+            {/* Examples */}
+            <div className={styles.welcomeExamplesSection}>
+              <p className={styles.welcomeExamplesTitle}>Or try these</p>
+              <div className={styles.welcomeExamples}>
+                <button
+                  type="button"
+                  onClick={() => setMood("Birthday cake frosting")}
+                  className={styles.welcomeExample}
+                >
+                  Birthday cake frosting
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMood("Cozy night by the fireplace")}
+                  className={styles.welcomeExample}
+                >
+                  Cozy night by the fireplace
+                </button>
               </div>
             </div>
 
-            <div className={styles.welcomeExamples}>
-              <p className={styles.welcomeExample}>Try: "Ocean meeting sky at dusk"</p>
-              <p className={styles.welcomeExample}>
-                Or: "Electric excitement and urban energy at night"
+            {/* Footer note */}
+            <div className={styles.welcomeFooter}>
+              <p className={styles.welcomeFooterText}>
+                Curated combinations from the{" "}
+                <a
+                  target="_"
+                  href="https://jinenstore.com/products/seigensha-a-dictionary-of-color-combinations"
+                >
+                  Sanzo Wada Dictionary of Color
+                </a>{" "}
+                (1933)
               </p>
             </div>
           </div>

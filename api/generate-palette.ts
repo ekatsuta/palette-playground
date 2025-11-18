@@ -18,11 +18,11 @@ When selecting a palette, consider:
 - Harmony and balance: How do the colors work together as a cohesive palette?
 - Practical application: How might these colors translate to different artistic mediums (painting, digital art, collage, etc.)?
 
-You should select the single best combination that captures the essence of the artist's inspiration. Provide brief reasoning to help the artist understand why this palette was chosen.`;
+You should select the single best combination that captures the essence of the artist's inspiration. Then, provide a playful list of 3-5 SHORT, specific things (1-5 words each) that share the same colors or feelings - these could be famous artworks, natural scenes, places, objects, foods, seasons, or cultural references that would further inspire the artist. Keep each item brief and punchy!`;
 
 interface LLMResponse {
   id: number;
-  reasoning: string;
+  inspirations: string;
 }
 
 const tools: Anthropic.Tool[] = [
@@ -37,13 +37,13 @@ const tools: Anthropic.Tool[] = [
           type: "number",
           description: "The ID of the selected palette from the Sanzo Wada Dictionary (1-348)",
         },
-        reasoning: {
+        inspirations: {
           type: "string",
           description:
-            "Brief 1-2 sentence explanation of why this palette fits the mood, focusing on color theory and emotional resonance",
+            "A playful, bullet-pointed list of 3-5 specific inspirations that share these colors or evoke similar feelings. IMPORTANT: Keep each item SHORT and concise - just 1-5 words maximum! Examples: '- Monet's Water Lilies', '- Rhode Island sunset', '- Kyoto tea house', '- Vintage teacups', '- Honeydew and mint'. Make it fun and evocative for artists of all ages! Format as a markdown list with each item on its own line starting with '- '.",
         },
       },
-      required: ["id", "reasoning"],
+      required: ["id", "inspirations"],
     },
   },
 ];
@@ -128,7 +128,7 @@ ${
     : "This is a new request for a color palette suggestion."
 }
 
-Please analyze this mood/inspiration and select exactly 1 color combination that best captures its essence. Use the select_palette tool to return your selection with reasoning that helps the artist understand your color theory logic.`;
+Please analyze this mood/inspiration and select exactly 1 color combination that best captures its essence. Use the select_palette tool to return your selection with a playful list of 3-5 SHORT inspirations (1-5 words each) - artworks, places, objects, natural scenes, etc. - that share these colors or evoke similar feelings. Keep it concise, fun, and inspiring for artists of all ages!`;
 
     const message = await anthropic.messages.create({
       model: "claude-3-5-haiku-20241022",
@@ -193,7 +193,7 @@ Please analyze this mood/inspiration and select exactly 1 color combination that
     const palette = {
       id: combination.id,
       colors: combination.colors,
-      reasoning: llmResponse.reasoning,
+      inspirations: llmResponse.inspirations,
     };
 
     // Log to Supabase for analytics
@@ -204,7 +204,7 @@ Please analyze this mood/inspiration and select exactly 1 color combination that
         await supabase.from("palette_generations").insert({
           mood: mood.trim(),
           palette_id: combination.id,
-          reasoning: llmResponse.reasoning,
+          inspirations: llmResponse.inspirations,
           colors: combination.colors,
           user_ip: req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
           user_agent: req.headers["user-agent"] || null,

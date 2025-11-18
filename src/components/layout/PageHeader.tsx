@@ -4,9 +4,11 @@ import styles from "./PageHeader.module.css";
 export default function PaletteHeader({
   onSubmit,
   isLoading,
+  onReset,
 }: {
   onSubmit: (mood: string) => void;
   isLoading: boolean;
+  onReset?: () => void;
 }) {
   const [mood, setMood] = useState("");
 
@@ -21,7 +23,14 @@ export default function PaletteHeader({
     <div className={styles.header}>
       <div className={styles.headerContent}>
         <div className={styles.headerInner}>
-          <h1 className={styles.headerTitle}>Palette Playground</h1>
+          <button
+            type="button"
+            onClick={onReset}
+            className={styles.headerTitle}
+            disabled={!onReset}
+          >
+            Palette Playground
+          </button>
           <form onSubmit={handleSubmit} className={styles.searchForm}>
             <input
               type="text"

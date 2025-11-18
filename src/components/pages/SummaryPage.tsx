@@ -47,7 +47,7 @@ export function SummaryPage({ combination, mood }: SummaryPageProps) {
 
         {/* Next steps hint */}
         <div className={styles.hintSection}>
-          <p className={styles.hintText}>Navigate right to learn why this palette was selected</p>
+          <p className={styles.hintText}>Navigate right to discover what inspired this palette</p>
         </div>
       </div>
     </div>
