@@ -57,6 +57,8 @@
   cursor: pointer;
   transition: opacity 0.2s;
   font-family: inherit;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .headerTitle:hover:not(:disabled) {
