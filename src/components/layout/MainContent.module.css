@@ -212,6 +212,9 @@
   font-style: italic;
   transition: opacity 0.2s;
   padding: 0.5rem;
+  color: inherit;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .welcomeExample:hover {
