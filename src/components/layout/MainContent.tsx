@@ -1,11 +1,13 @@
 import type { Dispatch, SetStateAction } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useSwipeable } from "react-swipeable";
 import { SummaryPage } from "../pages/SummaryPage";
 import { ReasoningPage } from "../pages/ReasoningPage";
 import { SingleCompositionPage, compositions } from "../pages/SingleCompositionPage";
 import { LoadingAnimation } from "../ui/LoadingAnimation";
+import { RotatingPalette } from "../ui/RotatingPalette";
 import type { PaletteWithReasoning } from "../../types/palette";
 import styles from "./MainContent.module.css";
 
@@ -101,6 +103,11 @@ export default function MainContent({
               </p>
             </div>
 
+            {/* Rotating Palette Preview */}
+            <div className={styles.rotatingPaletteSection}>
+              <RotatingPalette />
+            </div>
+
             {/* Prominent centered input */}
             <form onSubmit={handleSubmit} className={styles.welcomeForm}>
               <div className={styles.welcomeInputGroup}>
@@ -154,6 +161,11 @@ export default function MainContent({
                   Sanzo Wada Dictionary of Color
                 </a>{" "}
                 (1933)
+              </p>
+              <p className={styles.welcomeFooterText} style={{ marginTop: "0.75rem" }}>
+                <Link to="/palettes" style={{ textDecoration: "underline" }}>
+                  Browse all color combinations
+                </Link>
               </p>
             </div>
           </div>

@@ -25,7 +25,7 @@
 
 @media (min-width: 640px) {
   .welcomeScreen {
-    margin-top: -6rem;
+    margin-top: -4rem;
   }
 }
 
@@ -48,7 +48,7 @@
 
 @media (min-width: 768px) {
   .welcomeTitle {
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
   }
 }
 
@@ -79,6 +79,13 @@
   }
 }
 
+/* Rotating Palette Section */
+.rotatingPaletteSection {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 0;
+}
+
 /* Form Section */
 .welcomeForm {
   margin-bottom: 2.5rem;
@@ -101,6 +108,7 @@
   font-size: var(--text-xs);
   letter-spacing: 0.05em;
   margin-bottom: 0.75rem;
+  margin-top: 0.75rem;
 }
 
 .welcomeInput {
