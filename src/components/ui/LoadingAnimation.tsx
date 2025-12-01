@@ -59,8 +59,9 @@ function GoldenSectionIcon() {
 }
 
 export function LoadingAnimation() {
-  // Each icon shows for ~1s, then fades out, with total cycle of 3s
-  const cycleDuration = 3; // Total duration for all 3 icons
+  // Each icon shows for ~1.5s, with total cycle of 4.5s
+  const cycleDuration = 4.5; // Total duration for all 3 icons
+  const fadeTime = 0.05; // 5% of cycle for fade in/out
 
   return (
     <div className={styles.container}>
@@ -69,14 +70,14 @@ export function LoadingAnimation() {
         <motion.div
           className={styles.iconWrapper}
           animate={{
-            opacity: [0, 1, 1, 0, 0, 0],
+            opacity: [0, 1, 1, 0],
           }}
           transition={{
             opacity: {
               duration: cycleDuration,
               repeat: Infinity,
               ease: "easeInOut",
-              times: [0, 0.1, 0.25, 0.33, 0.34, 1],
+              times: [0, fadeTime, 0.33 - fadeTime, 0.33],
             },
           }}
         >
@@ -87,14 +88,14 @@ export function LoadingAnimation() {
         <motion.div
           className={styles.iconWrapper}
           animate={{
-            opacity: [0, 0, 0, 1, 1, 0, 0],
+            opacity: [0, 0, 1, 1, 0],
           }}
           transition={{
             opacity: {
               duration: cycleDuration,
               repeat: Infinity,
               ease: "easeInOut",
-              times: [0, 0.33, 0.4, 0.5, 0.58, 0.66, 1],
+              times: [0, 0.33, 0.33 + fadeTime, 0.66 - fadeTime, 0.66],
             },
           }}
         >
@@ -105,14 +106,14 @@ export function LoadingAnimation() {
         <motion.div
           className={styles.iconWrapper}
           animate={{
-            opacity: [0, 0, 0, 0, 0, 1, 1, 0],
+            opacity: [0, 0, 1, 1, 0],
           }}
           transition={{
             opacity: {
               duration: cycleDuration,
               repeat: Infinity,
               ease: "easeInOut",
-              times: [0, 0.66, 0.73, 0.83, 0.91, 0.96, 0.99, 1],
+              times: [0, 0.66, 0.66 + fadeTime, 1 - fadeTime, 1],
             },
           }}
         >

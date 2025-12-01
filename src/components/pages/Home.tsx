@@ -16,6 +16,11 @@ export function Home() {
   const { currentIndex, setCurrentIndex, goNext, goPrevious, reset, hasNext, hasPrevious } =
     usePagination(compositions.length + 2); // Summary + Reasoning + Compositions
 
+  // Scroll to top smoothly on mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   // Handle shared palette URLs on mount
   useEffect(() => {
     const shareData = parseShareUrl();
@@ -72,6 +77,7 @@ export function Home() {
         onNext={goNext}
         onPrevious={goPrevious}
         onSubmit={handleSubmit}
+        setCurrentIndex={setCurrentIndex}
       />
     </div>
   );

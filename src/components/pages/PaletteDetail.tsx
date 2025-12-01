@@ -10,9 +10,18 @@ export function PaletteDetail() {
 
   if (!palette) {
     return (
-      <div style={{ padding: "2rem", textAlign: "center" }}>
-        <h1>Palette not found</h1>
-        <button onClick={() => navigate("/palettes")}>← Back to All Palettes</button>
+      <div className={styles.container} style={{ alignItems: "center", justifyContent: "center" }}>
+        <button onClick={() => navigate("/palettes")} className={styles.backButton}>
+          ← Back to All Palettes
+        </button>
+        <div style={{ textAlign: "center", padding: "2rem" }}>
+          <h1 style={{ fontSize: "1.5rem", opacity: 0.6, marginBottom: "1rem", fontWeight: 400 }}>
+            Palette not found
+          </h1>
+          <p style={{ fontSize: "0.875rem", opacity: 0.4 }}>
+            The palette you're looking for doesn't exist.
+          </p>
+        </div>
       </div>
     );
   }

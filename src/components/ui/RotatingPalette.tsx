@@ -1,8 +1,19 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { moodPaletteMappings } from "../../data/sanzo-wada";
 import sanzoWadaColors from "../../../data/sanzo-wada-colors.json";
 import styles from "./RotatingPalette.module.css";
+
+export const moodPaletteMappings = [
+  { mood: "The quiet melancholy of rain on autumn leaves", paletteId: 182 },
+  { mood: "Electric excitement and urban energy at night", paletteId: 144 },
+  { mood: "Warm comfort of a sunlit afternoon", paletteId: 138 },
+  { mood: "Birthday cake frosting", paletteId: 14 },
+  { mood: "Cozy night by the fireplace", paletteId: 243 },
+  { mood: "Fresh morning dew on spring flowers", paletteId: 150 },
+  { mood: "Golden hour at the beach", paletteId: 151 },
+  { mood: "Nostalgic warmth of childhood memories", paletteId: 300 },
+  { mood: "Modern minimalist sophistication", paletteId: 139 },
+];
 
 export function RotatingPalette() {
   const [currentIndex, setCurrentIndex] = useState(0);

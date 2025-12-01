@@ -62,34 +62,46 @@ export function SingleCompositionPage({
   return (
     <div className={styles.compositionPage}>
       <div className={styles.compositionPageInner}>
-        <div className={styles.compositionName}>
-          <h2>{name}</h2>
+        {/* Mobile: Title above composition */}
+        <div className={styles.mobileHeader}>
+          <div className={styles.compositionName}>
+            <h2>{name}</h2>
+          </div>
         </div>
 
-        <div className={styles.compositionCanvas} onClick={() => setIsModalOpen(true)}>
-          <Component colors={hexColors} />
-        </div>
-
-        <div className={styles.hexSquaresList}>
-          {combination.colors.map((color, index) => (
-            <div
-              key={index}
-              className={styles.hexSquare}
-              style={{ backgroundColor: color.hex }}
-              title={color.name}
-            >
-              <span className={styles.hexText}>{color.hex}</span>
+        <div className={styles.compositionLayout}>
+          {/* Desktop: Title and share on left */}
+          <div className={styles.leftSection}>
+            <div className={styles.compositionName}>
+              <h2>{name}</h2>
             </div>
-          ))}
+            <div className={styles.shareSection}>
+              <ShareButton
+                paletteId={combination.id}
+                pageIndex={pageIndex}
+                mood={mood}
+                compositionName={name}
+              />
+            </div>
+          </div>
+
+          <div className={styles.compositionCanvasWrapper}>
+            <div className={styles.compositionCanvas} onClick={() => setIsModalOpen(true)}>
+              <Component colors={hexColors} />
+            </div>
+          </div>
         </div>
 
-        <div className={styles.shareSection}>
-          <ShareButton
-            paletteId={combination.id}
-            pageIndex={pageIndex}
-            mood={mood}
-            compositionName={name}
-          />
+        {/* Mobile: Share button below composition */}
+        <div className={styles.mobileFooter}>
+          <div className={styles.shareSection}>
+            <ShareButton
+              paletteId={combination.id}
+              pageIndex={pageIndex}
+              mood={mood}
+              compositionName={name}
+            />
+          </div>
         </div>
       </div>
 

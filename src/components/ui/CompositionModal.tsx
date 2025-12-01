@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import styles from "./CompositionModal.module.css";
 
@@ -31,7 +32,7 @@ export function CompositionModal({ isOpen, onClose, children }: CompositionModal
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modalWrapper} onClick={(e) => e.stopPropagation()}>
         <div className={styles.content}>
@@ -41,6 +42,7 @@ export function CompositionModal({ isOpen, onClose, children }: CompositionModal
           {children}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
