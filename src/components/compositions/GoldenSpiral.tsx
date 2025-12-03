@@ -3,24 +3,39 @@ interface GoldenSpiralProps {
 }
 
 export function GoldenSpiral({ colors }: GoldenSpiralProps) {
-  // Fibonacci rectangles with actual spiral overlay
+  // Fibonacci sequence scaled to fill the full page
   const c = colors.slice(0, 5);
 
   return (
-    <svg viewBox="0 0 400 400" className="w-full h-full">
-      {/* Fibonacci rectangles */}
-      <rect x="153" y="153" width="247" height="247" fill={c[0] || "#ccc"} />
-      <rect x="153" y="0" width="247" height="153" fill={c[1] || "#ccc"} />
-      <rect x="0" y="0" width="153" height="153" fill={c[2] || "#ccc"} />
-      <rect x="0" y="153" width="153" height="94" fill={c[3] || "#ccc"} />
-      <rect x="0" y="247" width="94" height="153" fill={c[4] || "#ccc"} />
+    <svg viewBox="0 0 800 800" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+      {/* Fibonacci squares spiraling counter-clockwise */}
 
-      {/* Golden spiral overlay */}
+      {/* 1. Largest square (left): 494x494 */}
+      <rect x="0" y="153" width="494" height="494" fill={c[0] || "#ccc"} />
+
+      {/* 2. Square (top-right): 306x306 */}
+      <rect x="494" y="153" width="306" height="306" fill={c[1] || "#ccc"} />
+
+      {/* 3. Square (bottom-right of #2): 188x188 */}
+      <rect x="612" y="459" width="188" height="188" fill={c[2] || "#ccc"} />
+
+      {/* 4. Square (left of #3): 118x118 */}
+      <rect x="494" y="529" width="118" height="118" fill={c[3] || "#ccc"} />
+
+      {/* 5. Square (above #4): 70x70 */}
+      <rect x="542" y="459" width="70" height="70" fill={c[4] || "#ccc"} />
+
+      {/* Continuous Fibonacci spiral */}
       <path
-        d="M 400 153 Q 400 0 247 0 Q 0 0 0 153 Q 0 247 94 247 Q 153 247 153 306"
+        d="M 0 647
+           A 494 494 0 0 1 494 153
+           A 306 306 0 0 1 800 459
+           A 188 188 0 0 1 612 647
+           A 118 118 0 0 1 494 529
+           A 70 70 0 0 1 542 459"
         fill="none"
-        stroke="rgba(0,0,0,0.15)"
-        strokeWidth="2"
+        stroke="rgba(0,0,0,0.2)"
+        strokeWidth="3"
       />
     </svg>
   );

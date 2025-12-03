@@ -1,0 +1,186 @@
+/* Mobile: Page counter with arrows */
+.mobileContainer {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  padding: 0.5rem 0.75rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1024px) {
+  .mobileContainer {
+    display: none;
+  }
+}
+
+/* Desktop: Dot navigation */
+.desktopContainer {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+@media (min-width: 1024px) {
+  .desktopContainer {
+    display: flex;
+  }
+}
+
+.homeButton {
+  background: none;
+  border: none;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+  margin-right: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.6);
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.homeButton:hover:not(:disabled) {
+  color: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+.homeButton:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.homeButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.arrowButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.6);
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.arrowButton:hover:not(:disabled) {
+  color: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+.arrowButton:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.arrowButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.pageCounter {
+  font-size: 0.8125rem;
+  font-family: ui-monospace, monospace;
+  color: rgba(0, 0, 0, 0.7);
+  font-weight: 500;
+  min-width: 3rem;
+  text-align: center;
+}
+
+.pageButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.label {
+  opacity: 0;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  font-size: 0.6875rem;
+  letter-spacing: 0.03em;
+}
+
+.pageButton:hover .label {
+  opacity: 0.6;
+}
+
+.dotContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot {
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.dotInactive {
+  width: 0.375rem;
+  height: 0.375rem;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.dotActive {
+  width: 0.625rem;
+  height: 0.625rem;
+  background: black;
+}
+
+.pageButton:hover .dotInactive {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.ring {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.pageNumber {
+  font-size: 0.625rem;
+  font-family: ui-monospace, monospace;
+  min-width: 1.5rem;
+  text-align: left;
+  transition: opacity 0.2s;
+}
+
+.pageNumberInactive {
+  opacity: 0;
+}
+
+.pageButton:hover .pageNumberInactive {
+  opacity: 0.2;
+}
+
+.pageNumberActive {
+  opacity: 0.4;
+}

@@ -1,11 +1,14 @@
 import type { Dispatch, SetStateAction } from "react";
-import { AnimatePresence, motion } from "motion/react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useSwipeable } from "react-swipeable";
+import { useRef, useEffect } from "react";
+import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 import { SummaryPage } from "../pages/SummaryPage";
 import { ReasoningPage } from "../pages/ReasoningPage";
 import { SingleCompositionPage, compositions } from "../pages/SingleCompositionPage";
 import { LoadingAnimation } from "../ui/LoadingAnimation";
+import { RotatingPalette } from "../ui/RotatingPalette";
+import { ScrollPagination } from "../ui/ScrollPagination";
+import { useScrollKeyboardNav } from "../../hooks/useScrollKeyboardNav";
 import type { PaletteWithReasoning } from "../../types/palette";
 import styles from "./MainContent.module.css";
 
@@ -19,9 +22,8 @@ interface MainContentProps {
   currentIndex: number;
   hasNext: boolean;
   hasPrevious: boolean;
-  onNext: () => void;
-  onPrevious: () => void;
   onSubmit: (mood: string) => void;
+  setCurrentIndex?: (index: number) => void;
 }
 
 export default function MainContent({
@@ -34,12 +36,14 @@ export default function MainContent({
   currentIndex,
   hasNext,
   hasPrevious,
-  onNext,
-  onPrevious,
   onSubmit,
+  setCurrentIndex,
 }: MainContentProps) {
   const totalPages = compositions.length + 2; // Summary + Reasoning + Compositions
   const showResults = palette !== null;
+
+  // Page labels for scroll pagination
+  const pageLabels = ["Summary", "Reasoning", ...compositions.map((c) => c.name)];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,12 +52,55 @@ export default function MainContent({
     }
   };
 
-  // Swipe handlers for mobile
-  const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => hasNext && onNext(),
-    onSwipedRight: () => hasPrevious && onPrevious(),
-    trackMouse: false, // Only track touch events, not mouse
-    preventScrollOnSwipe: true,
+  // Refs for each page section
+  const pageRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // Scroll to specific page
+  const scrollToPage = (index: number) => {
+    if (pageRefs.current[index]) {
+      pageRefs.current[index]?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  // Intersection Observer to track current page
+  useEffect(() => {
+    if (!showResults || !setCurrentIndex || !containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+            const index = pageRefs.current.indexOf(entry.target as HTMLDivElement);
+            if (index !== -1) {
+              setCurrentIndex(index);
+            }
+          }
+        });
+      },
+      {
+        root: containerRef.current,
+        threshold: [0, 0.5, 1],
+        rootMargin: "-10% 0px -10% 0px",
+      }
+    );
+
+    pageRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [showResults, setCurrentIndex]);
+
+  // Keyboard navigation
+  useScrollKeyboardNav({
+    enabled: showResults,
+    hasNext,
+    hasPrevious,
+    currentIndex,
+    onNavigate: scrollToPage,
   });
 
   return (
@@ -93,7 +140,6 @@ export default function MainContent({
           className={styles.welcomeScreen}
         >
           <div className={styles.welcomeContent}>
-            {/* Title */}
             <div className={styles.welcomeTitle}>
               <h1 className={styles.welcomeTitleText}>Palette Playground</h1>
               <p className={styles.welcomeSubtitle}>
@@ -101,7 +147,10 @@ export default function MainContent({
               </p>
             </div>
 
-            {/* Prominent centered input */}
+            <div className={styles.rotatingPaletteSection}>
+              <RotatingPalette />
+            </div>
+
             <form onSubmit={handleSubmit} className={styles.welcomeForm}>
               <div className={styles.welcomeInputGroup}>
                 <label className={styles.welcomeLabel}>Describe a mood, feeling, or concept</label>
@@ -122,28 +171,6 @@ export default function MainContent({
               </div>
             </form>
 
-            {/* Examples */}
-            <div className={styles.welcomeExamplesSection}>
-              <p className={styles.welcomeExamplesTitle}>Or try these</p>
-              <div className={styles.welcomeExamples}>
-                <button
-                  type="button"
-                  onClick={() => setMood("Birthday cake frosting")}
-                  className={styles.welcomeExample}
-                >
-                  Birthday cake frosting
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMood("Cozy night by the fireplace")}
-                  className={styles.welcomeExample}
-                >
-                  Cozy night by the fireplace
-                </button>
-              </div>
-            </div>
-
-            {/* Footer note */}
             <div className={styles.welcomeFooter}>
               <p className={styles.welcomeFooterText}>
                 Curated combinations from the{" "}
@@ -155,65 +182,67 @@ export default function MainContent({
                 </a>{" "}
                 (1933)
               </p>
+              <p className={styles.welcomeFooterText} style={{ marginTop: "0.75rem" }}>
+                <Link to="/palettes" style={{ textDecoration: "underline" }}>
+                  Browse all color combinations
+                </Link>
+              </p>
             </div>
           </div>
         </motion.div>
       ) : (
-        <div {...swipeHandlers} className={styles.resultsContainer}>
-          {/* Navigation arrows */}
-          {hasPrevious && (
-            <button
-              onClick={onPrevious}
-              className={`${styles.navButton} ${styles.navButtonLeft}`}
-              aria-label="Previous composition"
-            >
-              <ChevronLeft />
-            </button>
-          )}
+        <>
+          <ScrollPagination
+            totalPages={totalPages}
+            currentPage={currentIndex}
+            onPageClick={scrollToPage}
+            pageLabels={pageLabels}
+          />
 
-          {hasNext && (
-            <button
-              onClick={onNext}
-              className={`${styles.navButton} ${styles.navButtonRight}`}
-              aria-label="Next composition"
-            >
-              <ChevronRight />
-            </button>
-          )}
-
-          {/* Composition pages */}
-          {palette && (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-              >
-                {currentIndex === 0 ? (
+          <div ref={containerRef} className={styles.resultsContainer}>
+            {palette && (
+              <>
+                {/* Summary Page */}
+                <div
+                  ref={(el) => {
+                    pageRefs.current[0] = el;
+                  }}
+                  className={styles.pageSection}
+                >
                   <SummaryPage combination={palette} mood={submittedMood} />
-                ) : currentIndex === 1 ? (
-                  <ReasoningPage combination={palette} />
-                ) : (
-                  <SingleCompositionPage
-                    combination={palette}
-                    compositionIndex={currentIndex - 2}
-                    mood={submittedMood}
-                    pageIndex={currentIndex}
-                  />
-                )}
-              </motion.div>
-            </AnimatePresence>
-          )}
+                </div>
 
-          {/* Page indicator */}
-          <div className={styles.pageIndicator}>
-            <span>
-              {currentIndex + 1} / {totalPages}
-            </span>
+                {/* Reasoning Page */}
+                <div
+                  ref={(el) => {
+                    pageRefs.current[1] = el;
+                  }}
+                  className={styles.pageSection}
+                >
+                  <ReasoningPage combination={palette} />
+                </div>
+
+                {/* Composition Pages */}
+                {compositions.map((comp, index) => (
+                  <div
+                    key={index}
+                    ref={(el) => {
+                      pageRefs.current[index + 2] = el;
+                    }}
+                    className={styles.pageSection}
+                  >
+                    <SingleCompositionPage
+                      combination={palette}
+                      compositionIndex={index}
+                      mood={submittedMood}
+                      pageIndex={index + 2}
+                    />
+                  </div>
+                ))}
+              </>
+            )}
           </div>
-        </div>
+        </>
       )}
     </div>
   );

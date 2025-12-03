@@ -20,26 +20,20 @@ function RuleOfThirdsIcon() {
   );
 }
 
-function GoldenSpiralIcon() {
+function RadialBloomIcon() {
   return (
     <svg viewBox="0 0 60 60" className={styles.icon}>
-      {/* Outer border */}
-      <line x1="0" y1="0" x2="60" y2="0" stroke="currentColor" strokeWidth="0.75" />
-      <line x1="60" y1="0" x2="60" y2="60" stroke="currentColor" strokeWidth="0.75" />
-      <line x1="60" y1="60" x2="0" y2="60" stroke="currentColor" strokeWidth="0.75" />
-      <line x1="0" y1="60" x2="0" y2="0" stroke="currentColor" strokeWidth="0.75" />
-      {/* Interior divisions */}
-      <line x1="23" y1="0" x2="23" y2="60" stroke="currentColor" strokeWidth="0.75" />
-      <line x1="0" y1="23" x2="60" y2="23" stroke="currentColor" strokeWidth="0.75" />
-      <line x1="0" y1="37" x2="23" y2="37" stroke="currentColor" strokeWidth="0.75" />
-      <line x1="14" y1="37" x2="14" y2="60" stroke="currentColor" strokeWidth="0.75" />
-      {/* Golden spiral */}
-      <path
-        d="M 60 23 Q 60 0 37 0 Q 0 0 0 23 Q 0 37 14 37 Q 23 37 23 46"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="0.75"
-      />
+      {/* Outer circle */}
+      <circle cx="30" cy="30" r="30" fill="none" stroke="currentColor" strokeWidth="0.75" />
+      {/* Radial lines creating 8 segments */}
+      <line x1="30" y1="30" x2="30" y2="0" stroke="currentColor" strokeWidth="0.75" />
+      <line x1="30" y1="30" x2="51.2" y2="8.8" stroke="currentColor" strokeWidth="0.75" />
+      <line x1="30" y1="30" x2="60" y2="30" stroke="currentColor" strokeWidth="0.75" />
+      <line x1="30" y1="30" x2="51.2" y2="51.2" stroke="currentColor" strokeWidth="0.75" />
+      <line x1="30" y1="30" x2="30" y2="60" stroke="currentColor" strokeWidth="0.75" />
+      <line x1="30" y1="30" x2="8.8" y2="51.2" stroke="currentColor" strokeWidth="0.75" />
+      <line x1="30" y1="30" x2="0" y2="30" stroke="currentColor" strokeWidth="0.75" />
+      <line x1="30" y1="30" x2="8.8" y2="8.8" stroke="currentColor" strokeWidth="0.75" />
     </svg>
   );
 }
@@ -59,8 +53,8 @@ function GoldenSectionIcon() {
 }
 
 export function LoadingAnimation() {
-  // Each icon shows for ~1s, then fades out, with total cycle of 3s
-  const cycleDuration = 3; // Total duration for all 3 icons
+  // Each icon shows for ~1.5s, with total cycle of 4.5s
+  const cycleDuration = 4.5; // Total duration for all 3 icons
 
   return (
     <div className={styles.container}>
@@ -69,50 +63,50 @@ export function LoadingAnimation() {
         <motion.div
           className={styles.iconWrapper}
           animate={{
-            opacity: [0, 1, 1, 0, 0, 0],
+            opacity: [1, 1, 0, 0, 0, 0],
           }}
           transition={{
             opacity: {
               duration: cycleDuration,
               repeat: Infinity,
-              ease: "easeInOut",
-              times: [0, 0.1, 0.25, 0.33, 0.34, 1],
+              ease: "linear",
+              times: [0, 0.3, 0.33, 0.63, 0.97, 1],
             },
           }}
         >
           <RuleOfThirdsIcon />
         </motion.div>
 
-        {/* Icon 2: Golden Spiral - shows second */}
+        {/* Icon 2: Radial Bloom - shows second */}
         <motion.div
           className={styles.iconWrapper}
           animate={{
-            opacity: [0, 0, 0, 1, 1, 0, 0],
+            opacity: [0, 0, 1, 1, 0, 0],
           }}
           transition={{
             opacity: {
               duration: cycleDuration,
               repeat: Infinity,
-              ease: "easeInOut",
-              times: [0, 0.33, 0.4, 0.5, 0.58, 0.66, 1],
+              ease: "linear",
+              times: [0, 0.33, 0.36, 0.63, 0.66, 1],
             },
           }}
         >
-          <GoldenSpiralIcon />
+          <RadialBloomIcon />
         </motion.div>
 
         {/* Icon 3: Golden Section - shows third */}
         <motion.div
           className={styles.iconWrapper}
           animate={{
-            opacity: [0, 0, 0, 0, 0, 1, 1, 0],
+            opacity: [0, 0, 1, 1, 0],
           }}
           transition={{
             opacity: {
               duration: cycleDuration,
               repeat: Infinity,
-              ease: "easeInOut",
-              times: [0, 0.66, 0.73, 0.83, 0.91, 0.96, 0.99, 1],
+              ease: "linear",
+              times: [0, 0.66, 0.69, 0.97, 1],
             },
           }}
         >
