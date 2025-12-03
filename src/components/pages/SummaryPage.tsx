@@ -52,10 +52,7 @@ export function SummaryPage({ combination, mood }: SummaryPageProps) {
             <p>
               From the Sanzo Wada Dictionary of Color Combinations, I've selected a curated palette
               of {combination.colors.length} harmonious colors that resonates with your mood
-              description. This specific combination, #{combination.id}, was chosen from 348
-              thoughtfully composed palettes. Each palette in the Wada collection represents a
-              carefully balanced relationship between colors, designed for visual harmony rather
-              than contrast or discord.
+              description.
             </p>
             <p>
               The compositions you'll see below demonstrate how these colors work together across
