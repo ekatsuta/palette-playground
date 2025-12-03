@@ -381,13 +381,16 @@
   font-family: monospace;
   font-weight: 500;
   letter-spacing: 0.01em;
-  opacity: 0.6;
+  opacity: 0;
   color: rgba(0, 0, 0, 0.7);
   transition: opacity 0.2s;
+  display: none;
 }
 
-.hexSquareWrapper:hover .hexText {
+.hexSquareWrapper:hover .hexText,
+.hexSquareWrapper:active .hexText {
   opacity: 0.9;
+  display: inline;
 }
 
 @media (min-width: 640px) {
@@ -405,6 +408,12 @@
 @media (min-width: 1024px) {
   .hexText {
     font-size: 0.8125rem;
+    opacity: 0.6;
+    display: inline;
+  }
+
+  .hexSquareWrapper:hover .hexText {
+    opacity: 0.9;
   }
 }
 
