@@ -1,6 +1,6 @@
 /* Single Composition Page Container */
 .compositionPage {
-  padding: 4rem 0.75rem 3rem;
+  padding: 4rem 0.75rem 5rem;
   height: 100vh;
   width: 100%;
   max-width: 100vw;
@@ -37,6 +37,7 @@
 .mobileHeader {
   display: block;
   margin-bottom: 0.25rem;
+  margin-top: 0;
   flex-shrink: 0;
   min-height: fit-content;
 }
@@ -385,12 +386,6 @@
   color: rgba(0, 0, 0, 0.7);
   transition: opacity 0.2s;
   display: none;
-}
-
-.hexSquareWrapper:hover .hexText,
-.hexSquareWrapper:active .hexText {
-  opacity: 0.9;
-  display: inline;
 }
 
 @media (min-width: 640px) {
