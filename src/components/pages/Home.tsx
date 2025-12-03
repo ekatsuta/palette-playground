@@ -38,6 +38,7 @@ export function Home() {
   const handleSubmit = async (mood: string) => {
     setSubmittedMood(mood);
     reset();
+    window.scrollTo({ top: 0, behavior: "smooth" });
     await generate(mood);
   };
 

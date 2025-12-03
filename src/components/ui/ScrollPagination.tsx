@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Home } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowUpToLine } from "lucide-react";
 import styles from "./ScrollPagination.module.css";
 
 interface ScrollPaginationProps {
@@ -31,7 +31,7 @@ export function ScrollPagination({
           aria-label="Go to summary"
           title="Summary"
         >
-          <Home size={16} />
+          <ArrowUpToLine size={16} />
         </button>
         <button
           className={styles.arrowButton}

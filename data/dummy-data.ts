@@ -10,8 +10,8 @@ export const sanzoWadaData = sanzoWadaColors as SanzoWadaCombination[];
 // Mock function to simulate the API response from generate-palette.ts
 export function mockGeneratePalette(mood: string): Promise<GeneratePalettesResponse> {
   return new Promise((resolve) => {
-    // Simulate network delay (1-2 seconds)
-    const delay = 1000 + Math.random() * 1000;
+    // Simulate network delay (3-5 seconds)
+    const delay = 3000 + Math.random() * 4000;
 
     setTimeout(() => {
       // Randomly select a palette from the actual data

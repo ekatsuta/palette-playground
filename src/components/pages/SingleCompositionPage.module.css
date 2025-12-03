@@ -36,7 +36,7 @@
 /* Mobile Header - Title (visible only on mobile) */
 .mobileHeader {
   display: block;
-  margin-bottom: 0;
+  margin-bottom: 0.25rem;
   flex-shrink: 0;
   min-height: fit-content;
 }
@@ -54,7 +54,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  margin-top: 0;
+  margin-top: 0.75rem;
   flex-shrink: 0;
   flex-wrap: wrap;
 }
@@ -90,6 +90,7 @@
 /* Composition Name */
 .compositionName {
   margin-bottom: 0;
+  margin-top: 0;
   text-align: center;
   flex-shrink: 0;
   position: relative;
@@ -111,7 +112,7 @@
 .compositionName h2 {
   opacity: 0.6;
   font-size: var(--text-sm);
-  margin: 0.25rem 0;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;

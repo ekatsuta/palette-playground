@@ -232,7 +232,7 @@ export function SingleCompositionPage({
             ))}
           </div>
           {copiedIndex !== null && (
-            <div className={styles.copiedNotification}>Copied {hexColors[copiedIndex]}!</div>
+            <div className={styles.copiedNotification}>Copied {hexColors[copiedIndex]}</div>
           )}
         </div>
       </div>
