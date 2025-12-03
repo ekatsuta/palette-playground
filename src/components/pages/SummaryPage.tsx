@@ -45,9 +45,24 @@ export function SummaryPage({ combination, mood }: SummaryPageProps) {
           ))}
         </div>
 
-        {/* Next steps hint */}
-        <div className={styles.hintSection}>
-          <p className={styles.hintText}>Navigate right to discover what inspired this palette</p>
+        {/* Reasoning section */}
+        <div className={styles.reasoningSection}>
+          <p className={styles.reasoningTitle}>What you're seeing</p>
+          <div className={styles.reasoningText}>
+            <p>
+              From the Sanzo Wada Dictionary of Color Combinations, I've selected a curated palette
+              of {combination.colors.length} harmonious colors that resonates with your mood
+              description. This specific combination, #{combination.id}, was chosen from 348
+              thoughtfully composed palettes. Each palette in the Wada collection represents a
+              carefully balanced relationship between colors, designed for visual harmony rather
+              than contrast or discord.
+            </p>
+            <p>
+              The compositions you'll see below demonstrate how these colors work together across
+              different arrangements, helping you understand their relationships and practical
+              applications.
+            </p>
+          </div>
         </div>
       </div>
     </div>

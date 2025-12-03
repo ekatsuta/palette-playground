@@ -21,8 +21,6 @@ interface MainContentProps {
   currentIndex: number;
   hasNext: boolean;
   hasPrevious: boolean;
-  onNext: () => void;
-  onPrevious: () => void;
   onSubmit: (mood: string) => void;
   setCurrentIndex?: (index: number) => void;
 }
@@ -37,8 +35,6 @@ export default function MainContent({
   currentIndex,
   hasNext,
   hasPrevious,
-  onNext,
-  onPrevious,
   onSubmit,
   setCurrentIndex,
 }: MainContentProps) {
@@ -47,14 +43,6 @@ export default function MainContent({
 
   // Page labels for scroll pagination
   const pageLabels = ["Summary", "Reasoning", ...compositions.map((c) => c.name)];
-
-  // Example prompts to inspire users
-  const examplePrompts = [
-    "Elegant mountain wedding invitation",
-    "Eco-conscious sustainable brand",
-    "Playful kids toy packaging",
-    "Fresh energizing morning workspace",
-  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

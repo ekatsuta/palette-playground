@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { compositions } from "./SingleCompositionPage";
 import { usePagination } from "../../hooks/usePagination";
 import { usePaletteGeneration } from "../../hooks/usePaletteGeneration";
-import { useKeyboardNavigation } from "../../hooks/useKeyboardNavigation";
 import PageHeader from "../layout/PageHeader";
 import MainContent from "../layout/MainContent";
 import { parseShareUrl, loadPaletteById, clearShareParams } from "../../utils/share";
@@ -13,8 +12,9 @@ export function Home() {
   const [submittedMood, setSubmittedMood] = useState("");
 
   const { palette, setPalette, isLoading, error, generate } = usePaletteGeneration();
-  const { currentIndex, setCurrentIndex, goNext, goPrevious, reset, hasNext, hasPrevious } =
-    usePagination(compositions.length + 2); // Summary + Reasoning + Compositions
+  const { currentIndex, setCurrentIndex, reset, hasNext, hasPrevious } = usePagination(
+    compositions.length + 2
+  ); // Summary + Reasoning + Compositions
 
   // Scroll to top smoothly on mount
   useEffect(() => {
@@ -48,15 +48,6 @@ export function Home() {
     reset();
   };
 
-  // Keyboard navigation - only enabled when palette is shown
-  useKeyboardNavigation(
-    {
-      onArrowLeft: hasPrevious ? goPrevious : undefined,
-      onArrowRight: hasNext ? goNext : undefined,
-    },
-    { enabled: !!palette }
-  );
-
   const showHeader = palette !== null || isLoading;
 
   return (
@@ -74,8 +65,6 @@ export function Home() {
         currentIndex={currentIndex}
         hasNext={hasNext}
         hasPrevious={hasPrevious}
-        onNext={goNext}
-        onPrevious={goPrevious}
         onSubmit={handleSubmit}
         setCurrentIndex={setCurrentIndex}
       />

@@ -23,7 +23,7 @@ export function ReasoningPage({ combination }: ReasoningPageProps) {
 
         <div className={styles.hintSection}>
           <p className={styles.hintText}>
-            Navigate right to explore these colors through classical composition principles
+            Navigate below to explore these colors through classical composition principles
           </p>
         </div>
       </div>
