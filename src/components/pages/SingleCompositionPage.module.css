@@ -1,6 +1,6 @@
 /* Single Composition Page Container */
 .compositionPage {
-  padding: 4rem 0.75rem 1.5rem;
+  padding: 4rem 0.75rem 4rem;
   height: 100vh;
   width: 100%;
   max-width: 100vw;
@@ -55,7 +55,6 @@
   gap: 0.5rem;
   margin-top: 0;
   flex-shrink: 0;
-  padding-bottom: 0.5rem;
 }
 
 @media (min-width: 640px) {
