@@ -126,7 +126,7 @@
 
 @media (min-width: 768px) {
   .compositionName h2 {
-    font-size: var(--text-lg);
+    font-size: var(--text-xlF);
   }
 }
 
@@ -213,6 +213,7 @@
   align-items: center;
   gap: 0;
   width: 100%;
+  margin-top: 1rem;
 }
 
 @media (min-width: 1024px) {

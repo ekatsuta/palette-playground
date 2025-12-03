@@ -8,6 +8,7 @@ import { SingleCompositionPage, compositions } from "../pages/SingleCompositionP
 import { LoadingAnimation } from "../ui/LoadingAnimation";
 import { RotatingPalette } from "../ui/RotatingPalette";
 import { ScrollPagination } from "../ui/ScrollPagination";
+import { useScrollKeyboardNav } from "../../hooks/useScrollKeyboardNav";
 import type { PaletteWithReasoning } from "../../types/palette";
 import styles from "./MainContent.module.css";
 
@@ -94,28 +95,13 @@ export default function MainContent({
   }, [showResults, setCurrentIndex]);
 
   // Keyboard navigation
-  useEffect(() => {
-    if (!showResults) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown" && hasNext) {
-        e.preventDefault();
-        scrollToPage(currentIndex + 1);
-      } else if (e.key === "ArrowUp" && hasPrevious) {
-        e.preventDefault();
-        scrollToPage(currentIndex - 1);
-      } else if (e.key === "ArrowRight" && hasNext) {
-        e.preventDefault();
-        scrollToPage(currentIndex + 1);
-      } else if (e.key === "ArrowLeft" && hasPrevious) {
-        e.preventDefault();
-        scrollToPage(currentIndex - 1);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [showResults, hasNext, hasPrevious, currentIndex]);
+  useScrollKeyboardNav({
+    enabled: showResults,
+    hasNext,
+    hasPrevious,
+    currentIndex,
+    onNavigate: scrollToPage,
+  });
 
   return (
     <div className={styles.mainContent}>

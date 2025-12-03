@@ -24,31 +24,28 @@ export const compositions = [
     name: "Golden Section",
     Component: GoldenSection,
     description:
-      "Divides space using the golden ratio (1:1.618), creating naturally balanced compositions. Ideal for layouts, posters, and web design.",
+      "Divides space using the golden ratio (1:1.618), creating naturally balanced compositions.",
   },
   {
     name: "Rule of Thirds",
     Component: RuleOfThirds,
-    description:
-      "Places key elements along a 3x3 grid for dynamic, off-center balance. Perfect for photography, UI design, and advertising.",
+    description: "Places key elements along a 3x3 grid for dynamic, dynamic balance.",
   },
   {
     name: "Golden Spiral",
     Component: GoldenSpiral,
-    description:
-      "Guides the eye through a natural, flowing curve based on Fibonacci sequence. Great for logos, illustrations, and storytelling.",
+    description: "Guides the eye through a natural, flowing curve based on Fibonacci sequence.",
   },
   {
     name: "Golden Triangles",
     Component: GoldenTriangles,
     description:
-      "Uses diagonal lines to create dynamic movement and energy. Best for action-oriented designs and dramatic compositions.",
+      "Uses diagonal lines to create dynamic movement and energy. Best for dynamic scenes with diagonal elements.",
   },
   {
     name: "Horizontal Balance",
     Component: HorizonBalance,
-    description:
-      "Creates calm, stable compositions with horizontal divisions. Excellent for landscapes, headers, and serene atmospheres.",
+    description: "Creates calm, stable compositions with horizontal divisions.",
   },
   {
     name: "Diagonal Harmony",
@@ -59,20 +56,17 @@ export const compositions = [
   {
     name: "Symmetrical Balance",
     Component: SymmetricalBalance,
-    description:
-      "Provides formal, stable compositions through mirror symmetry. Ideal for elegant, traditional, or corporate designs.",
+    description: "Provides formal, stable compositions through mirror symmetry.",
   },
   {
     name: "Radial Bloom",
     Component: RadialBloom,
-    description:
-      "Draws focus to a central point with radiating elements. Perfect for badges, mandalas, and focal point designs.",
+    description: "Draws focus to a central point with radiating elements.",
   },
   {
     name: "Pyramid",
     Component: Pyramid,
-    description:
-      "Creates hierarchical stability with a triangular structure. Great for displaying importance and organized information.",
+    description: "Creates hierarchical stability with a triangular structure.",
   },
   {
     name: "L-Shape",
@@ -84,7 +78,7 @@ export const compositions = [
     name: "Fulcrum",
     Component: FulcrumComposition,
     description:
-      "Balances visual weight around a central pivot point. Useful for creating tension and visual interest.",
+      "(or Steelyard) Balances visual weight around a central pivot point. Large mass is counterbalanced by a smaller mass placed further away from the center.",
   },
   {
     name: "S-Curve",
@@ -101,8 +95,7 @@ export const compositions = [
   {
     name: "Circular",
     Component: CircularComposition,
-    description:
-      "Creates unity and completeness with circular arrangements. Perfect for cohesive, harmonious, and inclusive designs.",
+    description: "Creates unity and completeness with circular arrangements.",
   },
 ];
 
