@@ -149,17 +149,22 @@
   gap: 0.5rem;
   justify-content: center;
   flex-wrap: wrap;
+  padding-top: 3.5rem;
+  padding-bottom: 1rem;
 }
 
 @media (min-width: 640px) {
   .colorSwatches {
     gap: 0.75rem;
     flex-wrap: nowrap;
+    padding-top: 4rem;
   }
 }
 
 .swatchWrapper {
   position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .swatch {

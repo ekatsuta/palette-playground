@@ -56,6 +56,7 @@ export function SummaryPage({
               className={styles.swatchWrapper}
               onMouseEnter={() => setHoveredColor(index)}
               onMouseLeave={() => setHoveredColor(null)}
+              onClick={() => setHoveredColor(hoveredColor === index ? null : index)}
             >
               <div className={styles.swatch} style={{ backgroundColor: color.hex }} />
               {/* Hex and name tooltip on hover */}
