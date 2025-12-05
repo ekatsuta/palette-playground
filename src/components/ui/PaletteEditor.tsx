@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
+import { SketchPicker } from "react-color";
+import type { ColorResult } from "react-color";
 import { sanzoWadaData } from "../../../data/dummy-data";
 import type { PaletteWithReasoning, SanzoWadaCombination } from "../../types/palette";
 import styles from "./PaletteEditor.module.css";
@@ -13,6 +15,7 @@ interface PaletteEditorProps {
 export function PaletteEditor({ currentPalette, onClose, onApply }: PaletteEditorProps) {
   const [activeTab, setActiveTab] = useState<"browse" | "edit">("browse");
   const [editedColors, setEditedColors] = useState(currentPalette.colors.map((c) => c.hex));
+  const [openPickerIndex, setOpenPickerIndex] = useState<number | null>(null);
 
   // Group palettes by number of colors
   const palettesByCount = {
@@ -30,7 +33,13 @@ export function PaletteEditor({ currentPalette, onClose, onApply }: PaletteEdito
     onClose();
   };
 
-  const handleColorChange = (index: number, newHex: string) => {
+  const handleColorChange = (index: number, color: ColorResult) => {
+    const updated = [...editedColors];
+    updated[index] = color.hex;
+    setEditedColors(updated);
+  };
+
+  const handleHexInputChange = (index: number, newHex: string) => {
     const updated = [...editedColors];
     updated[index] = newHex;
     setEditedColors(updated);
@@ -128,16 +137,32 @@ export function PaletteEditor({ currentPalette, onClose, onApply }: PaletteEdito
                     />
                     <div className={styles.colorInfo}>
                       <label className={styles.colorLabel}>{color.name}</label>
-                      <input
-                        type="color"
-                        value={editedColors[index]}
-                        onChange={(e) => handleColorChange(index, e.target.value)}
-                        className={styles.colorPicker}
+                      <button
+                        type="button"
+                        className={styles.colorPickerButton}
+                        onClick={() => setOpenPickerIndex(openPickerIndex === index ? null : index)}
+                        style={{ backgroundColor: editedColors[index] }}
+                        aria-label={`Pick color for ${color.name}`}
                       />
+                      {openPickerIndex === index && (
+                        <>
+                          <div
+                            className={styles.pickerCover}
+                            onClick={() => setOpenPickerIndex(null)}
+                          />
+                          <div className={styles.pickerPopover}>
+                            <SketchPicker
+                              color={editedColors[index]}
+                              onChange={(color) => handleColorChange(index, color)}
+                              disableAlpha
+                            />
+                          </div>
+                        </>
+                      )}
                       <input
                         type="text"
                         value={editedColors[index]}
-                        onChange={(e) => handleColorChange(index, e.target.value)}
+                        onChange={(e) => handleHexInputChange(index, e.target.value)}
                         className={styles.hexInput}
                         pattern="^#[0-9A-Fa-f]{6}$"
                       />
