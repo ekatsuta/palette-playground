@@ -24,6 +24,8 @@ interface MainContentProps {
   hasPrevious: boolean;
   onSubmit: (mood: string) => void;
   setCurrentIndex?: (index: number) => void;
+  onEditPalette?: () => void;
+  onRevertPalette?: () => void;
 }
 
 export default function MainContent({
@@ -38,6 +40,8 @@ export default function MainContent({
   hasPrevious,
   onSubmit,
   setCurrentIndex,
+  onEditPalette,
+  onRevertPalette,
 }: MainContentProps) {
   const totalPages = compositions.length + 2; // Summary + Reasoning + Compositions
   const showResults = palette !== null;
@@ -58,8 +62,15 @@ export default function MainContent({
 
   // Scroll to specific page
   const scrollToPage = (index: number) => {
-    if (pageRefs.current[index]) {
-      pageRefs.current[index]?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const element = pageRefs.current[index];
+    const container = containerRef.current;
+    if (element && container) {
+      // Update index immediately
+      if (setCurrentIndex) {
+        setCurrentIndex(index);
+      }
+      // Scroll the container, not the window
+      container.scrollTo({ top: element.offsetTop, behavior: "smooth" });
     }
   };
 
@@ -209,7 +220,12 @@ export default function MainContent({
                   }}
                   className={styles.pageSection}
                 >
-                  <SummaryPage combination={palette} mood={submittedMood} />
+                  <SummaryPage
+                    combination={palette}
+                    mood={submittedMood}
+                    onEditPalette={onEditPalette}
+                    onRevertPalette={onRevertPalette}
+                  />
                 </div>
 
                 {/* Reasoning Page */}

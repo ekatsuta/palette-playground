@@ -4,12 +4,16 @@ import { usePagination } from "../../hooks/usePagination";
 import { usePaletteGeneration } from "../../hooks/usePaletteGeneration";
 import PageHeader from "../layout/PageHeader";
 import MainContent from "../layout/MainContent";
+import { PaletteEditor } from "../ui/PaletteEditor";
 import { parseShareUrl, loadPaletteById, clearShareParams } from "../../utils/share";
+import type { PaletteWithReasoning } from "../../types/palette";
 import styles from "../../App.module.css";
 
 export function Home() {
   const [mood, setMood] = useState("");
   const [submittedMood, setSubmittedMood] = useState("");
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [originalPalette, setOriginalPalette] = useState<PaletteWithReasoning | null>(null);
 
   const { palette, setPalette, isLoading, error, generate } = usePaletteGeneration();
   const { currentIndex, setCurrentIndex, reset, hasNext, hasPrevious } = usePagination(
@@ -39,14 +43,33 @@ export function Home() {
     setSubmittedMood(mood);
     reset();
     window.scrollTo({ top: 0, behavior: "smooth" });
-    await generate(mood);
+    const generatedPalette = await generate(mood);
+    // Store the original palette when first generated
+    if (generatedPalette) {
+      setOriginalPalette(generatedPalette);
+    }
   };
 
   const handleReset = () => {
     setPalette(null);
+    setOriginalPalette(null);
     setMood("");
     setSubmittedMood("");
     reset();
+  };
+
+  const handleEditPalette = () => {
+    setIsEditorOpen(true);
+  };
+
+  const handleApplyPalette = (newPalette: PaletteWithReasoning) => {
+    setPalette(newPalette);
+  };
+
+  const handleRevertPalette = () => {
+    if (originalPalette) {
+      setPalette(originalPalette);
+    }
   };
 
   const showHeader = palette !== null || isLoading;
@@ -68,7 +91,20 @@ export function Home() {
         hasPrevious={hasPrevious}
         onSubmit={handleSubmit}
         setCurrentIndex={setCurrentIndex}
+        onEditPalette={palette ? handleEditPalette : undefined}
+        onRevertPalette={
+          palette && originalPalette && palette !== originalPalette
+            ? handleRevertPalette
+            : undefined
+        }
       />
+      {isEditorOpen && palette && (
+        <PaletteEditor
+          currentPalette={palette}
+          onClose={() => setIsEditorOpen(false)}
+          onApply={handleApplyPalette}
+        />
+      )}
     </div>
   );
 }

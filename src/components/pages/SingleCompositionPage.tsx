@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Info } from "lucide-react";
+import { Info, Shuffle } from "lucide-react";
 import { GoldenSection } from "../compositions/GoldenSection";
 import { RuleOfThirds } from "../compositions/RuleOfThirds";
 import { GoldenSpiral } from "../compositions/GoldenSpiral";
@@ -115,6 +115,7 @@ export function SingleCompositionPage({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [shuffledColors, setShuffledColors] = useState<string[] | null>(null);
   const composition = compositions[compositionIndex];
 
   if (!composition) {
@@ -124,6 +125,7 @@ export function SingleCompositionPage({
   const { Component, name, description } = composition;
 
   const hexColors = combination.colors.map((c) => c.hex);
+  const displayColors = shuffledColors || hexColors;
 
   const copyHexToClipboard = async (hex: string, index: number) => {
     try {
@@ -133,6 +135,22 @@ export function SingleCompositionPage({
     } catch (err) {
       console.error("Failed to copy:", err);
     }
+  };
+
+  const handleShuffle = () => {
+    // Fisher-Yates shuffle algorithm with guarantee of different result
+    const currentColors = displayColors;
+    let newColors: string[];
+
+    do {
+      newColors = [...hexColors];
+      for (let i = newColors.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newColors[i], newColors[j]] = [newColors[j], newColors[i]];
+      }
+    } while (newColors.every((color, index) => color === currentColors[index]));
+
+    setShuffledColors(newColors);
   };
 
   return (
@@ -182,6 +200,15 @@ export function SingleCompositionPage({
                 mood={mood}
                 compositionName={name}
               />
+              <button
+                type="button"
+                className={styles.shuffleButton}
+                onClick={handleShuffle}
+                title="Shuffle colors"
+              >
+                <Shuffle size={16} />
+                <span>Shuffle</span>
+              </button>
             </div>
             <div className={styles.hexSquaresList}>
               {hexColors.map((hex, index) => (
@@ -203,7 +230,7 @@ export function SingleCompositionPage({
 
           <div className={styles.compositionCanvasWrapper}>
             <div className={styles.compositionCanvas} onClick={() => setIsModalOpen(true)}>
-              <Component colors={hexColors} />
+              <Component colors={displayColors} />
             </div>
           </div>
         </div>
@@ -217,6 +244,15 @@ export function SingleCompositionPage({
               mood={mood}
               compositionName={name}
             />
+            <button
+              type="button"
+              className={styles.shuffleButton}
+              onClick={handleShuffle}
+              title="Shuffle colors"
+            >
+              <Shuffle size={16} />
+              <span>Shuffle</span>
+            </button>
           </div>
           <div className={styles.hexSquaresList}>
             {hexColors.map((hex, index) => (
@@ -238,7 +274,7 @@ export function SingleCompositionPage({
       </div>
 
       <CompositionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <Component colors={hexColors} />
+        <Component colors={displayColors} />
       </CompositionModal>
     </div>
   );
