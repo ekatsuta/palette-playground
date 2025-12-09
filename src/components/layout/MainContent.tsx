@@ -23,7 +23,7 @@ interface MainContentProps {
   hasNext: boolean;
   hasPrevious: boolean;
   onSubmit: (mood: string) => void;
-  setCurrentIndex?: (index: number) => void;
+  setCurrentIndex: (index: number) => void;
   onEditPalette?: () => void;
   onRevertPalette?: () => void;
 }
@@ -65,18 +65,14 @@ export default function MainContent({
     const element = pageRefs.current[index];
     const container = containerRef.current;
     if (element && container) {
-      // Update index immediately
-      if (setCurrentIndex) {
-        setCurrentIndex(index);
-      }
-      // Scroll the container, not the window
+      setCurrentIndex(index);
       container.scrollTo({ top: element.offsetTop, behavior: "smooth" });
     }
   };
 
   // Intersection Observer to track current page
   useEffect(() => {
-    if (!showResults || !setCurrentIndex || !containerRef.current) return;
+    if (!showResults || !containerRef.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -103,7 +99,7 @@ export default function MainContent({
     return () => {
       observer.disconnect();
     };
-  }, [showResults, setCurrentIndex]);
+  }, [showResults]);
 
   // Keyboard navigation
   useScrollKeyboardNav({
