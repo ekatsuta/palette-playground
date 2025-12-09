@@ -29,7 +29,7 @@ export function Home() {
   useEffect(() => {
     const shareData = parseShareUrl();
     if (shareData) {
-      const sharedPalette = loadPaletteById(shareData.paletteId);
+      const sharedPalette = loadPaletteById(shareData.paletteId, shareData.inspirations);
       if (sharedPalette) {
         setPalette(sharedPalette);
         setSubmittedMood(shareData.mood);

@@ -5,16 +5,25 @@ interface ShareData {
   paletteId: number;
   pageIndex: number;
   mood: string;
+  inspirations?: string;
 }
 
 /**
  * Generate a shareable URL for the current palette and page
  */
-export function generateShareUrl(paletteId: number, pageIndex: number, mood: string): string {
+export function generateShareUrl(
+  paletteId: number,
+  pageIndex: number,
+  mood: string,
+  inspirations?: string
+): string {
   const url = new URL(window.location.origin);
   url.searchParams.set("palette", paletteId.toString());
   url.searchParams.set("page", pageIndex.toString());
   url.searchParams.set("mood", mood);
+  if (inspirations) {
+    url.searchParams.set("inspirations", inspirations);
+  }
   return url.toString();
 }
 
@@ -26,6 +35,7 @@ export function parseShareUrl(): ShareData | null {
   const paletteId = params.get("palette");
   const pageIndex = params.get("page");
   const mood = params.get("mood");
+  const inspirations = params.get("inspirations");
 
   if (!paletteId || !pageIndex || !mood) {
     return null;
@@ -42,13 +52,17 @@ export function parseShareUrl(): ShareData | null {
     paletteId: parsedPaletteId,
     pageIndex: parsedPageIndex,
     mood,
+    inspirations: inspirations || undefined,
   };
 }
 
 /**
  * Load palette data by ID from the Sanzo Wada dictionary
  */
-export function loadPaletteById(paletteId: number): PaletteWithReasoning | null {
+export function loadPaletteById(
+  paletteId: number,
+  inspirations?: string
+): PaletteWithReasoning | null {
   const combination = sanzoWadaData.find((c) => c.id === paletteId);
 
   if (!combination) {
@@ -57,7 +71,7 @@ export function loadPaletteById(paletteId: number): PaletteWithReasoning | null 
 
   return {
     ...combination,
-    inspirations: "Shared palette from Sanzo Wada Dictionary of Color Combinations",
+    inspirations: inspirations || "Shared palette from Sanzo Wada Dictionary of Color Combinations",
   };
 }
 
@@ -125,5 +139,6 @@ export function clearShareParams(): void {
   url.searchParams.delete("palette");
   url.searchParams.delete("page");
   url.searchParams.delete("mood");
+  url.searchParams.delete("inspirations");
   window.history.replaceState({}, "", url.toString());
 }

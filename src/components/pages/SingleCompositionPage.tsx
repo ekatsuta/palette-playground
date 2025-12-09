@@ -199,6 +199,7 @@ export function SingleCompositionPage({
                 pageIndex={pageIndex}
                 mood={mood}
                 compositionName={name}
+                inspirations={combination.inspirations}
               />
               <button
                 type="button"
@@ -243,6 +244,7 @@ export function SingleCompositionPage({
               pageIndex={pageIndex}
               mood={mood}
               compositionName={name}
+              inspirations={combination.inspirations}
             />
             <button
               type="button"
