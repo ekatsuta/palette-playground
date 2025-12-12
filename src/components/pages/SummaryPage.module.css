@@ -29,7 +29,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 @media (min-width: 640px) {
@@ -87,8 +87,61 @@
   }
 }
 
+.paletteIdSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+@media (min-width: 640px) {
+  .paletteIdSection {
+    flex-direction: row;
+  }
+}
+
 .paletteId {
   text-align: center;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.editButton,
+.revertButton {
+  background: none;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 0.5rem 1rem;
+  font-size: var(--text-xs);
+  letter-spacing: 0.05em;
+  font-variant: small-caps;
+  color: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 0.25rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.editButton:hover,
+.revertButton:hover {
+  border-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.02);
+  color: rgba(0, 0, 0, 1);
+}
+
+.editButton:active,
+.revertButton:active {
+  transform: scale(0.98);
 }
 
 .colorSwatches {
@@ -96,6 +149,7 @@
   gap: 0.5rem;
   justify-content: center;
   flex-wrap: wrap;
+  padding-bottom: 1rem;
 }
 
 @media (min-width: 640px) {
@@ -107,6 +161,8 @@
 
 .swatchWrapper {
   position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .swatch {
@@ -150,7 +206,8 @@
 
 .tooltip {
   position: absolute;
-  bottom: -3.5rem;
+  bottom: 100%;
+  margin-bottom: 0.5rem;
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(255, 255, 255, 0.95);
@@ -179,7 +236,7 @@
   flex-direction: column;
   gap: 0.75rem;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  padding-top: 1.25rem;
+  padding-top: 1rem;
 }
 
 @media (min-width: 640px) {

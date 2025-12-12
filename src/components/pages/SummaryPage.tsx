@@ -1,13 +1,21 @@
 import { useState } from "react";
+import { Edit3, RotateCcw } from "lucide-react";
 import type { PaletteWithReasoning } from "../../types/palette";
 import styles from "./SummaryPage.module.css";
 
 interface SummaryPageProps {
   combination: PaletteWithReasoning;
   mood: string;
+  onEditPalette?: () => void;
+  onRevertPalette?: () => void;
 }
 
-export function SummaryPage({ combination, mood }: SummaryPageProps) {
+export function SummaryPage({
+  combination,
+  mood,
+  onEditPalette,
+  onRevertPalette,
+}: SummaryPageProps) {
   const [hoveredColor, setHoveredColor] = useState<number | null>(null);
 
   return (
@@ -19,9 +27,25 @@ export function SummaryPage({ combination, mood }: SummaryPageProps) {
           <p className={styles.moodText}>"{mood}"</p>
         </div>
 
-        {/* Palette ID */}
-        <div className={styles.paletteId}>
-          <p className={styles.sectionLabel}>Palette No. {combination.id}</p>
+        {/* Palette ID and Buttons */}
+        <div className={styles.paletteIdSection}>
+          <div className={styles.paletteId}>
+            <p className={styles.sectionLabel}>Palette No. {combination.id}</p>
+          </div>
+          <div className={styles.buttonGroup}>
+            {onEditPalette && (
+              <button className={styles.editButton} onClick={onEditPalette}>
+                <Edit3 size={16} />
+                <span>Edit Palette</span>
+              </button>
+            )}
+            {onRevertPalette && (
+              <button className={styles.revertButton} onClick={onRevertPalette}>
+                <RotateCcw size={16} />
+                <span>Revert</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Large color swatches */}
@@ -32,6 +56,7 @@ export function SummaryPage({ combination, mood }: SummaryPageProps) {
               className={styles.swatchWrapper}
               onMouseEnter={() => setHoveredColor(index)}
               onMouseLeave={() => setHoveredColor(null)}
+              onClick={() => setHoveredColor(hoveredColor === index ? null : index)}
             >
               <div className={styles.swatch} style={{ backgroundColor: color.hex }} />
               {/* Hex and name tooltip on hover */}

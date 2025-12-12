@@ -8,13 +8,20 @@ interface ShareButtonProps {
   pageIndex: number;
   mood: string;
   compositionName?: string;
+  inspirations?: string;
 }
 
-export function ShareButton({ paletteId, pageIndex, mood, compositionName }: ShareButtonProps) {
+export function ShareButton({
+  paletteId,
+  pageIndex,
+  mood,
+  compositionName,
+  inspirations,
+}: ShareButtonProps) {
   const [showCopied, setShowCopied] = useState(false);
 
   const handleShare = async () => {
-    const url = generateShareUrl(paletteId, pageIndex, mood);
+    const url = generateShareUrl(paletteId, pageIndex, mood, inspirations);
     const title = compositionName
       ? `Palette #${paletteId} - ${compositionName}`
       : `Palette #${paletteId}`;

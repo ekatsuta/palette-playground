@@ -1,6 +1,16 @@
 import { useState } from "react";
 
-export function usePagination(totalPages: number) {
+export interface Pagination {
+  currentIndex: number;
+  setCurrentIndex: (index: number) => void;
+  goNext: () => void;
+  goPrevious: () => void;
+  reset: () => void;
+  hasNext: boolean;
+  hasPrevious: boolean;
+}
+
+export function usePagination(totalPages: number): Pagination {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goNext = () => setCurrentIndex((prev) => Math.min(totalPages - 1, prev + 1));

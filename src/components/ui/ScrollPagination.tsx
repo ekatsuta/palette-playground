@@ -25,6 +25,7 @@ export function ScrollPagination({
       {/* Mobile: Page counter with arrows */}
       <div className={styles.mobileContainer}>
         <button
+          type="button"
           className={styles.homeButton}
           onClick={() => onPageClick(0)}
           disabled={currentPage === 0}
@@ -34,6 +35,7 @@ export function ScrollPagination({
           <ArrowUpToLine size={16} />
         </button>
         <button
+          type="button"
           className={styles.arrowButton}
           onClick={() => onPageClick(currentPage - 1)}
           disabled={!hasPrevious}
@@ -45,6 +47,7 @@ export function ScrollPagination({
           {currentPage + 1} / {totalPages}
         </div>
         <button
+          type="button"
           className={styles.arrowButton}
           onClick={() => onPageClick(currentPage + 1)}
           disabled={!hasNext}
@@ -61,7 +64,12 @@ export function ScrollPagination({
         onMouseLeave={() => setIsHovered(false)}
       >
         {Array.from({ length: totalPages }).map((_, index) => (
-          <button key={index} onClick={() => onPageClick(index)} className={styles.pageButton}>
+          <button
+            key={index}
+            type="button"
+            onClick={() => onPageClick(index)}
+            className={styles.pageButton}
+          >
             {/* Label - appears on hover */}
             {isHovered && pageLabels && pageLabels[index] && (
               <span className={styles.label}>{pageLabels[index]}</span>
