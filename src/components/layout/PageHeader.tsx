@@ -16,6 +16,7 @@ export default function PaletteHeader({
     e.preventDefault();
     if (mood.trim()) {
       onSubmit(mood);
+      setMood("");
     }
   };
 
