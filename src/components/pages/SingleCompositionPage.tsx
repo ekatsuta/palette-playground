@@ -138,7 +138,18 @@ export function SingleCompositionPage({
   };
 
   const handleShuffle = () => {
-    const newColors = [...hexColors].sort(() => Math.random() - 0.5);
+    // Fisher-Yates shuffle algorithm with guarantee of different result
+    const currentColors = displayColors;
+    let newColors: string[];
+
+    do {
+      newColors = [...hexColors];
+      for (let i = newColors.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newColors[i], newColors[j]] = [newColors[j], newColors[i]];
+      }
+    } while (newColors.every((color, index) => color === currentColors[index]));
+
     setShuffledColors(newColors);
   };
 
