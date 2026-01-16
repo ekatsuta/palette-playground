@@ -49,9 +49,22 @@ const tools: Anthropic.Tool[] = [
 ];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS headers
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // CORS headers - whitelist production, preview deployments, and local development
+  const origin = req.headers.origin || "";
+
+  // Allow localhost for local development
+  const isLocalhost = origin.startsWith("http://localhost:");
+
+  // Allow all Vercel deployments (*.vercel.app)
+  const isVercelDeploy = origin.endsWith(".vercel.app");
+
+  const isAllowedOrigin = isLocalhost || isVercelDeploy;
+
+  if (isAllowedOrigin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+  }
+
   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -63,12 +76,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
+  // Reject requests from non-whitelisted origins
+  if (!isAllowedOrigin) {
+    return res.status(403).json({ error: "Origin not allowed" });
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   // Check rate limits
-  const rateLimitResult = checkRateLimit(req);
+  const rateLimitResult = await checkRateLimit(req);
 
   // Add rate limit headers to response
   res.setHeader("X-RateLimit-Hourly-Remaining", rateLimitResult.hourlyRemaining.toString());
