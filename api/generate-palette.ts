@@ -49,15 +49,16 @@ const tools: Anthropic.Tool[] = [
 ];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS headers - whitelist production and local development
-  const allowedOrigins = [
-    "https://palette-playground-beta.vercel.app",
-    "http://localhost:3000",
-    "http://localhost:5173", // Vite default dev port
-  ];
-
+  // CORS headers - whitelist production, preview deployments, and local development
   const origin = req.headers.origin || "";
-  const isAllowedOrigin = allowedOrigins.includes(origin);
+
+  // Allow localhost for local development
+  const isLocalhost = origin.startsWith("http://localhost:");
+
+  // Allow all Vercel deployments (*.vercel.app)
+  const isVercelDeploy = origin.endsWith(".vercel.app");
+
+  const isAllowedOrigin = isLocalhost || isVercelDeploy;
 
   if (isAllowedOrigin) {
     res.setHeader("Access-Control-Allow-Origin", origin);

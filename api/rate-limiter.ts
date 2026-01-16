@@ -34,7 +34,6 @@ export interface RateLimitResult {
 
 /**
  * Check if request is allowed based on rate limits
- * Now uses Vercel KV for persistent, distributed storage
  */
 export async function checkRateLimit(req: VercelRequest): Promise<RateLimitResult> {
   const ip = getClientIP(req);
