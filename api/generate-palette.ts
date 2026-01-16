@@ -49,9 +49,21 @@ const tools: Anthropic.Tool[] = [
 ];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS headers
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // CORS headers - whitelist production and local development
+  const allowedOrigins = [
+    "https://palette-playground-beta.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5173", // Vite default dev port
+  ];
+
+  const origin = req.headers.origin || "";
+  const isAllowedOrigin = allowedOrigins.includes(origin);
+
+  if (isAllowedOrigin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+  }
+
   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -63,12 +75,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
+  // Reject requests from non-whitelisted origins
+  if (!isAllowedOrigin) {
+    return res.status(403).json({ error: "Origin not allowed" });
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   // Check rate limits
-  const rateLimitResult = checkRateLimit(req);
+  const rateLimitResult = await checkRateLimit(req);
 
   // Add rate limit headers to response
   res.setHeader("X-RateLimit-Hourly-Remaining", rateLimitResult.hourlyRemaining.toString());

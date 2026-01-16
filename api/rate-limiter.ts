@@ -1,4 +1,8 @@
 import type { VercelRequest } from "@vercel/node";
+import { Redis } from "@upstash/redis";
+
+// Initialize Upstash Redis client
+const redis = Redis.fromEnv();
 
 interface RateLimitEntry {
   hourlyCount: number;
@@ -12,25 +16,12 @@ interface GlobalLimitEntry {
   resetTime: number;
 }
 
-// In-memory stores (resets on cold starts - update to use Vercel KV once out of beta)
-const ipStore: Record<string, RateLimitEntry> = {};
-let globalStore: GlobalLimitEntry = {
-  count: 0,
-  resetTime: getNextMidnight(),
-};
-
-// Cleanup tracking
-let lastCleanupTime = Date.now();
-
 // Configuration
 export const RATE_LIMITS = {
   PER_IP_HOURLY: 10,
   PER_IP_DAILY: 30,
   GLOBAL_DAILY: 300,
 };
-
-// Cleanup interval: 10 minutes
-const CLEANUP_INTERVAL = 10 * 60 * 1000;
 
 export interface RateLimitResult {
   allowed: boolean;
@@ -42,48 +33,26 @@ export interface RateLimitResult {
 }
 
 /**
- * Clean up stale IP entries to prevent memory leaks
- * Removes entries where both hourly and daily reset times have passed
- */
-function cleanupStaleEntries(now: number): void {
-  const entriesBefore = Object.keys(ipStore).length;
-
-  for (const ip in ipStore) {
-    const entry = ipStore[ip];
-    // Remove entry if both reset times have passed (IP is no longer active)
-    if (entry.hourlyResetTime < now && entry.dailyResetTime < now) {
-      delete ipStore[ip];
-    }
-  }
-
-  const entriesAfter = Object.keys(ipStore).length;
-  const removed = entriesBefore - entriesAfter;
-
-  if (removed > 0) {
-    console.log(`🧹 Cleaned up ${removed} stale IP entries (${entriesAfter} remaining)`);
-  }
-
-  lastCleanupTime = now;
-}
-
-/**
  * Check if request is allowed based on rate limits
+ * Now uses Vercel KV for persistent, distributed storage
  */
-export function checkRateLimit(req: VercelRequest): RateLimitResult {
+export async function checkRateLimit(req: VercelRequest): Promise<RateLimitResult> {
   const ip = getClientIP(req);
   const now = Date.now();
 
-  // Periodically clean up stale entries
-  if (now - lastCleanupTime > CLEANUP_INTERVAL) {
-    cleanupStaleEntries(now);
-  }
-
   // Check global daily limit first
-  if (globalStore.resetTime < now) {
+  const globalKey = "rate_limit:global";
+  let globalStore = await redis.get<GlobalLimitEntry>(globalKey);
+
+  if (!globalStore || globalStore.resetTime < now) {
+    // Reset global counter
     globalStore = {
       count: 0,
       resetTime: getNextMidnight(),
     };
+    await redis.set(globalKey, globalStore, {
+      exat: Math.floor(globalStore.resetTime / 1000), // Expire at midnight
+    });
   }
 
   if (globalStore.count >= RATE_LIMITS.GLOBAL_DAILY) {
@@ -98,16 +67,17 @@ export function checkRateLimit(req: VercelRequest): RateLimitResult {
   }
 
   // Get or create IP entry
-  if (!ipStore[ip]) {
-    ipStore[ip] = {
+  const ipKey = `rate_limit:ip:${ip}`;
+  let entry = await redis.get<RateLimitEntry>(ipKey);
+
+  if (!entry) {
+    entry = {
       hourlyCount: 0,
       dailyCount: 0,
       hourlyResetTime: now + 60 * 60 * 1000, // 1 hour
       dailyResetTime: getNextMidnight(),
     };
   }
-
-  const entry = ipStore[ip];
 
   // Reset hourly counter if expired
   if (entry.hourlyResetTime < now) {
@@ -148,7 +118,16 @@ export function checkRateLimit(req: VercelRequest): RateLimitResult {
   // Increment counters
   entry.hourlyCount++;
   entry.dailyCount++;
+
+  // Save updated IP entry with TTL (automatically cleanup after daily reset)
+  const ttlSeconds = Math.ceil((entry.dailyResetTime - now) / 1000);
+  await redis.set(ipKey, entry, { ex: ttlSeconds });
+
+  // Increment global counter
   globalStore.count++;
+  await redis.set(globalKey, globalStore, {
+    exat: Math.floor(globalStore.resetTime / 1000),
+  });
 
   return {
     allowed: true,
