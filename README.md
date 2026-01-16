@@ -1,10 +1,12 @@
 # Palette Playground
 
-An AI-powered color palette discovery tool that generates harmonious color combinations based on mood descriptions, drawing from the legendary **Sanzo Wada Dictionary of Color Combinations** (1933).
+An AI-powered color palette discovery tool that generates harmonious color combinations based on mood descriptions, drawing from the **[Sanzo Wada Dictionary of Color Combinations](https://jinenstore.com/products/seigensha-a-dictionary-of-color-combinations?currency=USD&variant=32102262472759&utm_source=google&utm_medium=cpc&utm_campaign=Google%20Shopping&stkn=c148e1c8d233&gad_source=1&gad_campaignid=20990878921&gbraid=0AAAAADlsF2HnWND6Igwtg-tQMDy3kRiOW&gclid=CjwKCAiA4KfLBhB0EiwAUY7GAc7ewjwqEd_c42xVUJ2qfH7nXIFOBd2KIwRI2kaxYlhOQQ47ME9wkhoCgkQQAvD_BwE)** (1933).
 
 ## About
 
-This application uses Claude AI to interpret artistic inspirations and moods, then intelligently selects a perfect palette from Sanzo Wada's 348 carefully curated color combinations. Each palette is visualized through 14 classical art composition principles. The idea is for these compositional inspirations to serve as a creative jumping-off point for any project — from digital art and painting to photography, illustration, or even knitting!
+This application uses Claude AI to interpret artistic inspirations and moods, then intelligently selects a perfect palette from Sanzo Wada's 348 carefully curated color combinations. Each palette is visualized through 14 classical art composition principles. The idea is for these compositional inspirations to serve as a creative jumping-off point for any project — from digital art and painting to photography, illustration, or even decoration ideas for a kid's birthday party!
+
+https://github.com/user-attachments/assets/1c1776d7-63fb-4cf4-80e2-4d74f68d333d
 
 ### The Sanzo Wada Dictionary
 
