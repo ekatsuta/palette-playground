@@ -1,8 +1,11 @@
 import type { VercelRequest } from "@vercel/node";
 import { Redis } from "@upstash/redis";
 
-// Initialize Upstash Redis client
-const redis = Redis.fromEnv();
+// Check if Redis is configured
+const hasRedisConfig = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN;
+
+// Initialize Upstash Redis client only if credentials are available
+const redis = hasRedisConfig ? Redis.fromEnv() : null;
 
 interface RateLimitEntry {
   hourlyCount: number;
@@ -36,6 +39,18 @@ export interface RateLimitResult {
  * Check if request is allowed based on rate limits
  */
 export async function checkRateLimit(req: VercelRequest): Promise<RateLimitResult> {
+  // If Redis is not configured (local development), allow all requests
+  if (!redis) {
+    console.log("⚠️  Rate limiting disabled (Redis not configured)");
+    return {
+      allowed: true,
+      hourlyRemaining: RATE_LIMITS.PER_IP_HOURLY,
+      dailyRemaining: RATE_LIMITS.PER_IP_DAILY,
+      resetTime: Date.now() + 60 * 60 * 1000,
+      resetMinutes: 60,
+    };
+  }
+
   const ip = getClientIP(req);
   const now = Date.now();
 
