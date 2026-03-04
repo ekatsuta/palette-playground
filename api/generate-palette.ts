@@ -149,7 +149,7 @@ ${
 Please analyze this mood/inspiration and select exactly 1 color combination that best captures its essence. Use the select_palette tool to return your selection with a playful list of 3-5 SHORT inspirations (1-5 words each) - artworks, places, objects, natural scenes, etc. - that share these colors or evoke similar feelings. Keep it concise, fun, and inspiring for artists of all ages!`;
 
     const message = await anthropic.messages.create({
-      model: "claude-3-5-haiku-20241022",
+      model: "claude-haiku-4-5-20251001",
       max_tokens: 500,
       system: [
         {
